@@ -1,0 +1,57 @@
+<!doctype html>
+<html ng-app="myApp">
+<head>
+    <script src="../lib/angular/angular.js"></script>
+    <script src="../lib/lodash/lodash.js"></script>
+    <script src="../dist/ng-bootstrap-grid.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<form name="form">
+    <div class="container-fluid" ng-controller="MyController">
+        <h1>Category Grid</h1>
+        <category-grid options="gridOptions"></category-grid>
+    </div>
+</form>
+<script type="text/javascript">
+    var myApp = angular.module('myApp', ['categoryGrid']);
+
+    myApp.controller('MyController', ['$scope', function($scope) {
+        $scope.gridOptions = {
+            enableRowSelection: true,
+            columns : [
+                {displayName: 'FirstName', field:'firstName',cellStyle: "width:25%", cellTemplate:'<input type="text" class="form-control" ng-model="item[col.field]">'},
+                {displayName: 'LastName', field:'lastName', cellTemplate:'<a href="" ng-click="cellTemplateScope.canEdit(row)">{{item[col.field]}}</a>', cellTemplateScope: {
+                    canEdit : function(row){
+                        console.log(JSON.stringify(row));
+                        return true;
+                    }
+                }},
+                {displayName: 'Company', field:'company', category:true},
+                {displayName: 'Employed', field:'employed', cellTemplate:'<input type="checkbox" ng-checked="item[col.field]">' }
+            ],
+            data : [
+                {
+                    "firstName": "Cox",
+                    "lastName": "Carney",
+                    "company": "Enormo",
+                    "employed": true
+                },
+                {
+                    "firstName": "Lorraine",
+                    "lastName": "Wise",
+                    "company": "Comveyer",
+                    "employed": false
+                },
+                {
+                    "firstName": "Nancy",
+                    "lastName": "Waters",
+                    "company": "Enormo",
+                    "employed": false
+                }
+            ]
+        }
+    }]);
+</script>
+</body>
+</html>
