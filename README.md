@@ -1,5 +1,5 @@
 ## ng-bootstrap-grid
-This project provide a Grid (Table) controller for angularJs. The style will use the bootstrap. The function will include Selection Grid and Category Grid.
+This project provide a Grid (Table) controller for angularJs. The style will use the bootstrap. The function will include Selection Grid, Category Grid and Pagination Grid.
 
 
 ###Installation
@@ -44,3 +44,33 @@ Directives from this repository are automatically tested with the following brow
 - Safari
 
 Modern mobile browsers should work without problems.
+
+###Example
+Please download and use `bower install` the project. Run and check the example case for usage.
+
+###Need help?
+Need help using ng-bootstrap-grid?
+
+- Create new issues in this repository to ask questions about using ng-bootstrap-grid.
+- Ask a question in StackOverflow under the ng-bootstrap-grid tag.
+ 
+
+###Roadmap of ng-bootstrap-grid
+- Support basic bootstrap grid (`DONE`)
+- Support cell template for all kinds of bootstrap grid (`DONE`)
+- Support selection bootstrap grid (`DONE`)
+- Support category bootstrap grid (`DONE`)
+- Support category bootstrap grid with selection (`DONE`)
+- Support pagination bootstrap grid(`DONE`)
+- Support pagination bootstrap grid with selection (`DONE`)
+- Support sort function of bootstrap grid (`TODO`)
+- Support sort function of bootstrap grid with pagination (`TODO`) 
+- Support column hide and column customized definition by grid menu (`TODO`) 
+- Support column moving of bootstrap grid (`TODO`) 
+- Support footer of bootstrap grid (`TODO`) 
+- Support multiple level header of bootstrap grid (`TODO`) 
+
+###Thanks
+Thanks ng-grid push me to make this decision create this project. The function of ng-grid is awesome but UI style and performance is far form what I expect.
+
+Thanks Lodash and bootstrap, both of you are awesome technology and less my code.
