@@ -1,10 +1,11 @@
-angular.module('categoryGrid', [])
+angular.module('ng-bootstrap-grid', [])
     .directive('categoryGrid', function() {
         return {
             restrict: 'E',
             replace: true,
             scope: {
-                options: '='
+                options: '=',
+                onSelect: '='
                 /*expandOn: '=',
                  onSelect: '&',
                  onClick: '&',
@@ -73,6 +74,11 @@ angular.module('categoryGrid', [])
                         }
                     }
                 };
+                scope.selectRow = function(row) {
+                    if(scope.onSelect) {
+                        scope.onSelect(row);
+                    }
+                }
             },
             template:
             "<div class='table-responsive'>\n" +
@@ -95,7 +101,7 @@ angular.module('categoryGrid', [])
             "               </td>\n" +
             "           </tr>\n" +
             "           <tr ng-repeat='item in row.items' ng-show='row.initStatus'>\n" +
-            "               <td ng-if='options.enableRowSelection'><input type='checkbox' ng-model='item.selection'></td>" +
+            "               <td ng-if='options.enableRowSelection'><input type='checkbox' ng-model='item.selection' ng-click='selectRow(row)'></td>" +
             "               <td ng-repeat='col in columns' >\n" +
             "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +
             "                   <div ng-if='!col.cellTemplate'>{{ item[col.field] }}</div>\n" +
@@ -103,6 +109,92 @@ angular.module('categoryGrid', [])
             "           </tr>\n" +
             "       </tbody>\n" +
             "   </table>\n" +
+            "" +
+            "</div>\n"
+        }
+    })
+    .directive('paginationGrid', function() {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                options: '=',
+                onSelect: '=',
+                onPaginationChange: '=',
+                onPaginationBegin:'=',
+                onPaginationEnd:'='
+            },
+            link : function (scope, element, attrs) {
+                scope.columns = scope.options.columns;
+                scope.data = scope.options.data;
+                /*console.log(scope.columns);
+                 console.log(scope.data);
+                 for(var dataKey in scope.data){
+                 for(var colKey in scope.columns) {
+                 console.log("dataKey:"+dataKey + " , colKey : " + colKey);
+                 var row = scope.data[dataKey];
+                 var f = scope.columns[colKey];
+                 console.log("row : " + row + ", f : " + f.field + ", rs: " + row[f.field]);
+                 }
+                 }*/
+
+                scope.selectAll = function(isSelectAll) {
+                    console.log(isSelectAll);
+                    var rows = scope.data;
+                    for(var i=0; i < rows.length; i++) {
+                        var row = rows[i];
+                        row.selection = isSelectAll;
+                    }
+                };
+                scope.selectRow = function(row) {
+                    if(scope.onSelect) {
+                        scope.onSelect(row);
+                    }
+                }
+            },
+            template:
+            "<div class='table-responsive'>\n" +
+            "   <table class='table table-bordered table-hover table-striped'>\n" +
+            "       <thead>\n" +
+            "           <tr>\n" +
+            "               <th ng-if='options.enableRowSelection' class='pagination-checkbox'>" +
+            "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll'>" +
+            "               </th>" +
+            "               <th ng-repeat='col in columns' style={{col.cellStyle}} >" +
+            "                   <div ng-if='col.headTemplate' compile='col.headTemplate' cell-template-scope='col.headTemplateScope'></div>" +
+            "                   <div ng-if='!col.headTemplate' >{{col.headTemplate || col.displayName || col.field}}</div>" +
+            "               </th>\n" +
+            "           </tr>\n" +
+            "       </thead>\n" +
+            "       <tbody>\n" +
+            "           <tr ng-repeat='item in data'>\n" +
+            "               <td ng-if='options.enableRowSelection' class='pagination-checkbox'><input type='checkbox' ng-model='item.selection' ng-click='selectRow(row)'></td>" +
+            "               <td ng-repeat='col in columns' >\n" +
+            "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +
+            "                   <div ng-if='!col.cellTemplate'>{{ item[col.field] }}</div>\n" +
+            "               </td>\n" +
+            "           </tr>\n" +
+            "       </tbody>\n" +
+            "   </table>\n" +
+            "   <nav class='page-nav'>\n" +
+            "       <ul class='pagination'>\n" +
+            "           <li>\n" +
+            "               <a href='#' aria-label='Previous'>\n" +
+            "                   <span aria-hidden='true'>&laquo;</span>\n" +
+            "               </a>\n" +
+            "           </li>\n" +
+            "           <li><a href=''>1</a></li>\n" +
+            "           <li><a href=''>2</a></li>\n" +
+            "           <li><a href=''>3</a></li>\n" +
+            "           <li><a href=''>4</a></li>\n" +
+            "           <li><a href=''>5</a></li>\n" +
+            "           <li>\n" +
+            "               <a href='' aria-label='Next'>\n" +
+            "                   <span aria-hidden='true'>&raquo;</span>\n" +
+            "               </a>\n" +
+            "           </li>\n" +
+            "       </ul>\n" +
+            "   </nav>" +
             "</div>\n"
         }
     })

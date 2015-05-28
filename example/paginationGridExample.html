@@ -5,12 +5,13 @@
     <script src="../lib/lodash/lodash.js"></script>
     <script src="../dist/ng-bootstrap-grid.js"></script>
     <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../dist/css/ng-bootstrap-grid.css">
 </head>
 <body>
 <form name="form">
     <div class="container-fluid" ng-controller="MyController">
         <h1>Category Grid</h1>
-        <category-grid options="gridOptions" on-select="rowSelect"></category-grid>
+        <pagination-grid options="gridOptions" on-select="rowSelect"></pagination-grid>
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
         <p>{{resultData}}</p>
     </div>
@@ -22,15 +23,10 @@
         $scope.gridOptions = {
             enableRowSelection: true,
             columns : [
-                {displayName: 'FirstName', field:'firstName',cellStyle: "width:25%", cellTemplate:'<input type="text" class="form-control" ng-model="item[col.field]">'},
-                {displayName: 'LastName', field:'lastName', cellTemplate:'<a href="" ng-click="cellTemplateScope.canEdit(row)">{{item[col.field]}}</a>', cellTemplateScope: {
-                    canEdit : function(row){
-                        console.log(JSON.stringify(row));
-                        return true;
-                    }
-                }},
-                {displayName: 'Company', field:'company', category:true},
-                {displayName: 'Employed', field:'employed', cellTemplate:'<input type="checkbox" ng-model="item[col.field]">' }
+                {displayName: 'FirstName', field:'firstName',cellStyle: "width:25%"},
+                {displayName: 'LastName', field:'lastName'},
+                {displayName: 'Company', field:'company'},
+                {displayName: 'Employed', field:'employed'}
             ],
             data : [
                 {
