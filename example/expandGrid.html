@@ -1,38 +1,48 @@
 <!doctype html>
 <html ng-app="myApp">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+    <script src="../lib/jquery/dist/jquery.js"></script>
     <script src="../lib/angular/angular.js"></script>
     <script src="../lib/lodash/lodash.js"></script>
-    <script src="../dist/ng-bootstrap-paged-grid.js"></script>
+    <script src="../dist/ng-bootstrap-expand-grid.js"></script>
+    <script src="../dist/ng-grid-menu.js"></script>
     <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="../dist/css/ng-bootstrap-grid.css">
+    <style>
+        .inlineForm tr {
+            height:42px;
+        }
+        label {
+            padding-left: 20px;
+        }
+        .trSelected {
+            background-color: #51b2f6;
+        }
+    </style>
 </head>
 <body>
 <form name="form">
     <div class="container-fluid" ng-controller="MyController">
-        <h1>Pagination Grid</h1>
-        <pagination-grid options="gridOptions" on-select="rowSelect"></pagination-grid>
-        <!--<pagination-grid options="gridOptions" on-select="rowSelect"></pagination-grid>-->
+        <h1>Category Grid</h1>
+        <!--<page-include ext-url="example/expendForm.html"></page-include>-->
+        <expand-grid options="gridOptions" grid-menu></expand-grid>
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
         <p>{{resultData}}</p>
     </div>
 </form>
 <script type="text/javascript">
-    var myApp = angular.module('myApp', ['ng-bootstrap-grid']);
+    var myApp = angular.module('myApp', ['ng-bootstrap-grid','ng-grid-menu']);
 
     myApp.controller('MyController', ['$scope', function($scope) {
         $scope.gridOptions = {
             enableRowSelection: true,
-            enableGridMenu: true,
-            noDataMessage: '没有找到匹配的结果',
+            expandableRowTemplate: 'expandForm.html',
             columns : [
                 {displayName: 'FirstName', field:'firstName',cellStyle: "width:25%"},
                 {displayName: 'LastName', field:'lastName'},
-                {displayName: 'Company', field:'company'},
+                {displayName: 'Company', field:'company', category:true},
                 {displayName: 'Employed', field:'employed'}
             ],
-            data : [/*
+            data : [
                 {
                     "firstName": "Cox",
                     "lastName": "Carney",
@@ -50,7 +60,7 @@
                     "lastName": "Waters",
                     "company": "Enormo",
                     "employed": false
-                }*/
+                }
             ]
         }
 

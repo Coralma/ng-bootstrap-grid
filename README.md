@@ -23,7 +23,7 @@ When you're done, your setup should look similar to the following:
 <head>
     <script src="js/angular/angular.js"></script>
     <script src="js/lodash/lodash.js"></script>
-    <script src="js/ng-bootstrap-grid/dist/ng-bootstrap-grid.js"></script>
+    <script src="js/ng-bootstrap-grid/dist/ng-bootstrap-category-grid.js"></script>
     <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
 </head>
 <body>

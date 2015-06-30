@@ -1,0 +1,115 @@
+<!doctype html>
+<html ng-app="myApp">
+<head>
+    <script src="../lib/angular/angular.js"></script>
+    <script src="../lib/lodash/lodash.js"></script>
+    <script src="../dist/ng-bootstrap-category-grid.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../dist/css/ng-bootstrap-grid.css">
+    <style>
+        body{
+            font-size: 12px;
+            font-family: 'Microsoft YaHei','Arial','SimSun';
+        }
+
+        input {
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
+            border: none;
+            background-color: transparent;
+        }
+
+        .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+            padding: 5px;
+            line-height: 1.42857143;
+            vertical-align: top;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+<form name="form">
+    <div class="container-fluid" ng-controller="MyController">
+        <h1>Category Grid</h1>
+        <category-grid options="gridOptions" on-select="rowSelect"></category-grid>
+        <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
+        <p>{{resultData}}</p>
+    </div>
+</form>
+<script type="text/javascript">
+    var myApp = angular.module('myApp', ['ng-bootstrap-grid']);
+
+    myApp.controller('MyController', ['$scope', function($scope) {
+        $scope.canEdit = function(row) {
+            console.log(JSON.stringify(row));
+        }
+        $scope.gridOptions = {
+            enableRowSelection: true,
+            columns : [
+                {displayName: '操作', field:'firstName',cellStyle: "width:50px"},
+                {displayName: '损失项目', field:'lastName',cellStyle: "width:80px", cellTemplate:'<a href="" ng-click="cellTemplateScope.canEdit(row)">{{item[col.field]}}</a>', cellTemplateScope: {
+                    canEdit : function(row){
+                        console.log(JSON.stringify(row));
+                        return true;
+                    }
+                }},
+                {displayName: '配件编号', field:'company', category:true, visible:false, cellStyle: "width:80px"},
+                {displayName: '配件渠道', field:'employed',cellStyle: "width:80px" },
+                {displayName: '单价', field:'price', category:true,cellStyle: "width:50px"},
+                {displayName: '报价', field:'price', category:true,cellStyle: "width:50px"},
+                {displayName: '用量', field:'price', category:true,cellStyle: "width:50px",
+                    cellTemplate:'<input type="text" ng-model="item[col.field]" style="width:45px" ng-blur="cellTemplateScope.changeNo(item)">', cellTemplateScope: {
+                        changeNo : function(item){
+                            item.lastName = item.lastName + item.price;
+                            console.log(JSON.stringify(item));
+                    }
+                }},
+                {displayName: '材料费', field:'price', category:true,cellStyle: "width:70px"},
+                {displayName: '折后材料费', field:'price', category:true,cellStyle: "width:80px"},
+                {displayName: '工种', field:'price', category:true,cellStyle: "width:50px"},
+                {displayName: '工时', field:'price', category:true,cellStyle: "width:50px"},
+                {displayName: '折后工时', field:'price', category:true,cellStyle: "width:70px"},
+                {displayName: '喷漆', field:'price', category:true,cellStyle: "width:50px"},
+                {displayName: '折后喷漆费', field:'price', category:true,cellStyle: "width:80px"},
+                {displayName: '回收', field:'price', category:true,cellStyle: "width:42px", cellTemplate:'<input type="checkbox" ng-model="item[col.field]">'},
+                {displayName: '残值', field:'price', category:true,cellStyle: "width:42px"},
+                {displayName: '折旧', field:'price', category:true,cellStyle: "width:42px"},
+                {displayName: '附件', field:'price', category:true,cellStyle: "width:42px"},
+                {displayName: '备注', field:'price', category:true,cellStyle: "width:42px"}
+            ],
+            data : [
+                {
+                    "firstName": "换件",
+                    "lastName": "Carney",
+                    "company": "Enormo",
+                    "employed": true
+                },
+                {
+                    "firstName": "换件",
+                    "lastName": "Wise",
+                    "company": "Comveyer",
+                    "employed": false
+                },
+                {
+                    "firstName": "换件",
+                    "lastName": "Waters",
+                    "company": "Enormo",
+                    "employed": false
+                }
+            ]
+        }
+
+        $scope.submitData = function() {
+            $scope.resultData = $scope.gridOptions.data;
+            console.log(JSON.stringify($scope.gridOptions.data, null, '\t'));
+        }
+
+        $scope.rowSelect = function(row) {
+            console.log('run row select');
+        }
+    }]);
+</script>
+</body>
+</html>

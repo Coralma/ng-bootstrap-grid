@@ -1,0 +1,36 @@
+<!doctype html>
+<html ng-app="myApp">
+<head>
+    <script src="../lib/jquery/dist/jquery.js"></script>
+    <script src="../lib/angular/angular.js"></script>
+    <script src="../lib/lodash/lodash.js"></script>
+    <script src="../dist/ng-bootstrap-expand-grid.js"></script>
+    <script src="../dist/ng-grid-menu.js"></script>
+    <script src="../lib/bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+    <style>
+        .wrapper{
+            border: 1px dashed red;
+            height: 150px;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            width: 150px;
+        }
+        .wrapper .selection{
+            width:150px;
+            border:1px solid #ccc
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <select size="15" class="selection">
+                <option>Item 1</option>
+                <option>Item 2</option>
+                <option>Item 3</option>
+            </select>
+        </div>
+    </div>
+</body>
+</html>

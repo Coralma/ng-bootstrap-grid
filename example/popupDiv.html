@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<p>
+    MapReduce的缺陷很多，最大的缺陷之一是Map ＋ Reduce的模型。这个模型并不适合描述复杂的数据处理过程。很多公司（包括我们）把各种奇怪的Machine Learning计算用MR模型描述，不断挖（lan）掘（yong）MR潜力，对系统工程师和Ops也是极大挑战了。很多计算，本质上并不是一个Map，Shuffle再Reduce的结构，比如我编译一个SubQuery的SQL，每个Query都做一次Group By，我可能需要Map，Reduce＋Reduce，中间不希望有无用的Map；又或者我需要Join，这对MapReduce来说简直是噩梦，什么给左右表加标签，小表用Distributed Cache分发，各种不同Join的Hack，都是因为MapReduce本身是不直接支持Join的，其实我需要的是，两组不同的计算节点扫描了数据之后按照Key分发数据到下一个阶段再计算，就这么简单的规则而已；再或者我要表示一组复杂的数据Pipeline，数据在一个无数节点组成的图上流动，而因为MapReduce的呆板模型，我必须一次一次在一个Map/Reduce步骤完成之后不必要地把数据写到磁盘上再读出，才能继续下一个节点，因为Map Reduce2个阶段完成之后，就算是一个独立计算步骤完成，必定会写到磁盘上等待下一个Map Reduce计算。
+</p>
+
+<div style="position: absolute; left: 50%;">
+    <div style="position: relative; left: -50%; border: dotted red 1px;">
+        I am some centered shrink-to-fit content! <br />
+        tum te tum
+    </div>
+</div>
+</body>
+</html>
