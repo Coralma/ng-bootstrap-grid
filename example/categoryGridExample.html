@@ -32,6 +32,7 @@
     myApp.controller('MyController', ['$scope', function($scope) {
         $scope.gridOptions = {
             enableRowSelection: true,
+            enableCategory:false,
             columnDefs : [
                 {displayName: 'IndexOrder', field:'indexOrder', enableSorting: true},
                 {displayName: 'FirstName', field:'firstName', cellTemplate:'<input type="text" ng-model="item[col.field]" style="width:100%;">'},
