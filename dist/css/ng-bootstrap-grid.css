@@ -34,14 +34,55 @@
     display: inline;
 }
 
+.bs-grid tr {
+    height: 35px;
+}
 
 .table > thead > tr > th {
-    vertical-align: bottom;
-    border-bottom: 2px solid #dddddd;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid #dddddd;
     padding: 4px;
-    background-image: -webkit-linear-gradient(#f5f5f5, #eeeeee 60%, #f1f1f1);
-    background-image: -o-linear-gradient(#f5f5f5, #eeeeee 60%, #f1f1f1);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#f5f5f5), color-stop(60%, #eeeeee), to(#f1f1f1));
-    background-image: linear-gradient(#f5f5f5, #eeeeee 60%, #f1f1f1);
+    background-image: -webkit-linear-gradient(#ffffff, #f5f5f5 60%, #f1f1f1);
+    background-image: -o-linear-gradient(#ffffff, #f5f5f5 60%, #f1f1f1);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), color-stop(60%, #f5f5f5), to(#f1f1f1));
+    background-image: linear-gradient(#ffffff, #f5f5f5 60%, #f1f1f1);
     background-repeat: no-repeat;
+}
+.bs-grid {
+    margin-top: 5px;
+}
+.bs-grid td {
+    padding: 4px !important;
+    vertical-align: middle !important;
+    font-size: 12px !important;
+}
+
+.bs-grid input {
+    border: none !important;
+    background-color: transparent !important;
+    padding:2px !important;
+    height: 25px !important;
+    font-size: 12px !important;
+    box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.075);
+}
+
+.bs-grid select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-overflow: '';
+    box-sizing: border-box;
+    align-items: center;
+    border: none;
+    border-image-source: none;
+    border-image-slice: initial;
+    border-image-width: initial;
+    border-image-outset: initial;
+    border-image-repeat: initial;
+    white-space: normal;
+    -webkit-rtl-ordering: logical;
+    background-color: transparent;
+    cursor: pointer;
+    -webkit-appearance: none;
+    width: 100%;
 }

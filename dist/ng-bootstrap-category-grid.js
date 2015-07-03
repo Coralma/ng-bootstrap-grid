@@ -6,28 +6,16 @@ angular.module('ng-bootstrap-grid', [])
             scope: {
                 options: '=',
                 onSelect: '='
-                /*expandOn: '=',
-                 onSelect: '&',
-                 onClick: '&',
-                 initialSelection: '@',
-                 treeControl: '='*/
             },
             link : function (scope, element, attrs) {
+                scope.enableCategory = true;
                 scope.columns = scope.options.columnDefs;
                 scope.data = scope.options.data;
                 scope.appScope = scope.$parent;
-                /*console.log(scope.columns);
-                 console.log(scope.data);
-                 for(var dataKey in scope.data){
-                 for(var colKey in scope.columns) {
-                 console.log("dataKey:"+dataKey + " , colKey : " + colKey);
-                 var row = scope.data[dataKey];
-                 var f = scope.columns[colKey];
-                 console.log("row : " + row + ", f : " + f.field + ", rs: " + row[f.field]);
-                 }
-                 }*/
-
                 scope.categoryData = function(data) {
+                    if(!angular.isUndefined(scope.options.enableCategory)) {
+                        scope.enableCategory = scope.options.enableCategory;
+                    }
                     var categoryRows = [],item = data[0], categorys=[], len = data.length, i = 0;
                     var categoryField = getCategoryField(scope.options.columnDefs);
                     /*console.log("categoryColumn : "+ JSON.stringify(categoryField));*/
@@ -139,7 +127,7 @@ angular.module('ng-bootstrap-grid', [])
             "           </tr>" +
             "       </thead>" +
             "       <tbody ng-repeat='row in rows'>" +
-            "           <tr ng-click='row.initStatus=!row.initStatus'>" +
+            "           <tr ng-click='row.initStatus=!row.initStatus' ng-if='enableCategory'>" +
             "               <td colspan='{{columnNumber}}'>" +
             "               <i class='glyphicon panel-icon' ng-class='{\"glyphicon-chevron-down\": row.initStatus, \"glyphicon-chevron-right\": !row.initStatus}'></i><span style='padding-left: 10px'>{{row.category}}</span>" +
             "               </td>" +
@@ -168,12 +156,6 @@ angular.module('ng-bootstrap-grid', [])
                     scope.cellTemplateScope = scope.$eval(attrs.cellTemplateScope);
                     // Watch for changes to expression.
                     scope.$watch(attrs.compile, function (new_val) {
-                        /*// Compile creates a linking function that can be used with any scope.
-                         var link = $compile(new_val);
-                         // Executing the linking function creates a new element.
-                         var new_elem = link(scope);
-                         // Which we can then append to our DOM element.
-                         element.append(new_elem);*/
                         var new_element = angular.element(new_val);
                         element.append(new_element);
                         $compile(new_element)(scope);

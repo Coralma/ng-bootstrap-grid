@@ -7,6 +7,13 @@
     <script src="../dist/ng-bootstrap-category-grid.js"></script>
     <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="../dist/css/ng-bootstrap-grid.css">
+
+    <style>
+        body{
+            font-size: 12px;
+            font-family: 'Microsoft YaHei','Arial','SimSun';
+        }
+    </style>
 </head>
 <body>
 <form name="form">
@@ -27,42 +34,24 @@
             enableRowSelection: true,
             columnDefs : [
                 {displayName: 'IndexOrder', field:'indexOrder', enableSorting: true},
-                {displayName: 'FirstName', field:'firstName',cellStyle: "width:25%", cellTemplate:'<input type="text" class="form-control" ng-model="item[col.field]">'},
-/*                {displayName: 'LastName', field:'lastName', cellTemplate:'<a href="" ng-click="cellTemplateScope.canEdit(row)">{{item[col.field]}}</a>', cellTemplateScope: {
-                    canEdit : function(row){
-                        console.log(JSON.stringify(row));
-                        return true;
-                    }
-                }},*/
+                {displayName: 'FirstName', field:'firstName', cellTemplate:'<input type="text" ng-model="item[col.field]" style="width:100%;">'},
                 {displayName: 'LastName', field:'lastName', cellTemplate:'<a href="" ng-click="appScope.showData(item)">{{item[col.field]}}</a>'},
                 {displayName: 'Company', field:'company', category:true},
-                {displayName: 'Employed', field:'employed', cellTemplate:'<input type="checkbox" ng-model="item[col.field]">' }
+                {displayName: 'Employed', field:'employed', cellTemplate:'<input type="checkbox" ng-model="item[col.field]">' },
+                {displayName: 'Type', field:'type',
+                    cellTemplate:'<select ng-model="item[col.field]">' +
+                                '    <option value ="1">Developer</option>' +
+                                '    <option value ="2">Manager</option>' +
+                                '    <option value ="3">Tester</option>' +
+                                '</select>'}
             ],
             onRegisterApi : function(gridApi){
               $scope.gridApi = gridApi;
             },
             data : [
-                {
-                    "indexOrder": "2",
-                    "firstName": "Cox",
-                    "lastName": "Carney",
-                    "company": "Enormo",
-                    "employed": true
-                },
-                {
-                    "indexOrder": "3",
-                    "firstName": "Lorraine",
-                    "lastName": "Wise",
-                    "company": "Comveyer",
-                    "employed": false
-                },
-                {
-                    "indexOrder": "1",
-                    "firstName": "Nancy",
-                    "lastName": "Waters",
-                    "company": "Enormo",
-                    "employed": false
-                }
+                {"indexOrder": "2","firstName": "Cox", "lastName": "Carney", "company": "Enormo", "employed": true, "type":'1'},
+                {"indexOrder": "3","firstName": "Lorraine", "lastName": "Wise", "company": "Comveyer", "employed": false, "type":'3'},
+                {"indexOrder": "1", "firstName": "Nancy", "lastName": "Waters", "company": "Enormo", "employed": false, "type":'2'}
             ]
         }
 
