@@ -38,6 +38,9 @@
                 {displayName: 'Company', field:'company', category:true},
                 {displayName: 'Employed', field:'employed', cellTemplate:'<input type="checkbox" ng-model="item[col.field]">' }
             ],
+            onRegisterApi : function(gridApi){
+              $scope.gridApi = gridApi;
+            },
             data : [
                 {
                     "indexOrder": "2",
@@ -84,6 +87,10 @@
                 "company": "C" +_.random(500),
                 "employed": true
             });
+            $scope.gridApi.refresh();
+        }
+        $scope.delete = function() {
+            console.log(JSON.stringify($scope.gridApi.getSelectedRows()));
         }
         $scope.testData = "Test Data";
     }]);

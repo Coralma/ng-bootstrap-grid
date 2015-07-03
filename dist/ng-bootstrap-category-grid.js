@@ -27,7 +27,7 @@ angular.module('ng-bootstrap-grid', [])
                  }
                  }*/
 
-                scope.$watch('options.data', function(data) {
+                scope.categoryData = function(data) {
                     var categoryRows = [],item = data[0], categorys=[], len = data.length, i = 0;
                     var categoryField = getCategoryField(scope.options.columnDefs);
                     /*console.log("categoryColumn : "+ JSON.stringify(categoryField));*/
@@ -55,7 +55,7 @@ angular.module('ng-bootstrap-grid', [])
                     }
                     scope.rows = categoryRows;
                     /*console.log(JSON.stringify(scope.rows, null, '\t'));*/
-                }, true);
+                }
 
                 initColumn = function() {
                     var index = 0;
@@ -103,6 +103,26 @@ angular.module('ng-bootstrap-grid', [])
                         scope.onSelect(row);
                     }
                 }
+                scope.getSelectedRows = function() {
+                    var selectedRows = [];
+                    _.forEach(scope.rows, function(row) {
+                        _.forEach(row.items, function(item) {
+                            if(item.selection) {
+                                selectedRows.push(item);
+                            }
+                        })
+                    });
+                    return selectedRows;
+                }
+                // init category
+                scope.categoryData(scope.data);
+                // init explore api
+                scope.options.onRegisterApi({
+                    refresh :  function() {scope.categoryData(scope.data)},
+                    getSelectedRows : function() {
+                        return scope.getSelectedRows();
+                    }
+                });
             },
             template:
             "<div class='table-responsive'>" +
