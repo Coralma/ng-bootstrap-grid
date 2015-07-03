@@ -47,13 +47,13 @@
         }
         $scope.gridOptions = {
             enableRowSelection: true,
-            columns : [
+            columnDefs : [
                 {displayName: '操作', field:'firstName',cellStyle: "width:50px"},
-                {displayName: '损失项目', field:'lastName',cellStyle: "width:80px", cellTemplate:'<a href="" ng-click="cellTemplateScope.canEdit(row)">{{item[col.field]}}</a>', cellTemplateScope: {
-                    canEdit : function(row){
+                {displayName: '损失项目', field:'lastName',cellStyle: "width:80px", cellTemplate:'<a href="" ng-click="root.canEdit(row)">{{item[col.field]}}</a>', cellTemplateScope: {
+                   /* canEdit : function(row){
                         console.log(JSON.stringify(row));
                         return true;
-                    }
+                    }*/
                 }},
                 {displayName: '配件编号', field:'company', category:true, visible:false, cellStyle: "width:80px"},
                 {displayName: '配件渠道', field:'employed',cellStyle: "width:80px" },

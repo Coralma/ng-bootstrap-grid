@@ -13,9 +13,9 @@ angular.module('ng-bootstrap-grid', [])
                  treeControl: '='*/
             },
             link : function (scope, element, attrs) {
-                scope.columns = scope.options.columns;
+                scope.columns = scope.options.columnDefs;
                 scope.data = scope.options.data;
-
+                scope.appScope = scope.$parent;
                 /*console.log(scope.columns);
                  console.log(scope.data);
                  for(var dataKey in scope.data){
@@ -29,10 +29,10 @@ angular.module('ng-bootstrap-grid', [])
 
                 scope.$watch('options.data', function(data) {
                     var categoryRows = [],item = data[0], categorys=[], len = data.length, i = 0;
-                    var categoryField = getCategoryField(scope.options.columns);
-                    console.log("categoryColumn : "+ JSON.stringify(categoryField));
+                    var categoryField = getCategoryField(scope.options.columnDefs);
+                    /*console.log("categoryColumn : "+ JSON.stringify(categoryField));*/
                     initColumn();
-
+                    data = sortData(data);
                     while(i < len) {
                         item = data[i++];
                         var value = item[categoryField];
@@ -40,7 +40,7 @@ angular.module('ng-bootstrap-grid', [])
                     }
                     var uniqCategorys = _.uniq(categorys);
                     var ucLen = uniqCategorys.length, j = 0, uniqCategoryItem = uniqCategorys[0];
-                    console.log("uniqCategorys: " + JSON.stringify(uniqCategorys) + ", ucLen: " + ucLen);
+                    /*console.log("uniqCategorys: " + JSON.stringify(uniqCategorys) + ", ucLen: " + ucLen);*/
                     while(j < ucLen) {
                         uniqCategoryItem = uniqCategorys[j++];
                         var categoryRow= {};
@@ -51,11 +51,11 @@ angular.module('ng-bootstrap-grid', [])
                             return item[categoryField] == uniqCategoryItem;
                         });
                         categoryRows.push(categoryRow);
-                        console.log(JSON.stringify(categoryRow.items));
+                        /*console.log(JSON.stringify(categoryRow.items));*/
                     }
                     scope.rows = categoryRows;
-                    console.log(JSON.stringify(scope.rows, null, '\t'));
-                });
+                    /*console.log(JSON.stringify(scope.rows, null, '\t'));*/
+                }, true);
 
                 initColumn = function() {
                     var index = 0;
@@ -69,7 +69,17 @@ angular.module('ng-bootstrap-grid', [])
                         }
                     });
                     scope.columnNumber = index + 1; //FIXME it remove the hidden column and selection function.
+                };
+                sortData = function(data) {
+                    var sortList = _.filter(scope.columns, function(col) {
+                        return col['enableSorting'] == true;
+                    });
+                    _.forEach(sortList, function(sortDef) {
+                        data = _.sortByOrder(data, [sortDef.field], ['asc'])
+                    })
+                    return data;
                 }
+
                 getCategoryField = function(cols) {
                     var cf = _.result(_.find(cols, function(chr) {
                         return chr.category == true;
@@ -77,7 +87,7 @@ angular.module('ng-bootstrap-grid', [])
                     return cf;
                 };
                 scope.selectAll = function(isSelectAll) {
-                    console.log(isSelectAll);
+                    /*console.log(isSelectAll);*/
                     var rows = scope.rows;
                     for(var i=0; i < rows.length; i++) {
                         var row = rows[i];
@@ -95,55 +105,58 @@ angular.module('ng-bootstrap-grid', [])
                 }
             },
             template:
-            "<div class='table-responsive'>\n" +
-            "   <table class='table table-bordered table-hover' style='table-layout:fixed;'>\n" +
-            "       <thead>\n" +
-            "           <tr>\n" +
+            "<div class='table-responsive'>" +
+            "   <table class='table table-bordered table-hover bs-grid' style='table-layout:fixed;'>" +
+            "       <thead>" +
+            "           <tr>" +
             "               <th ng-if='options.enableRowSelection' class='cate-radio-cell'>" +
             "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll'>" +
             "               </th>" +
             "               <th ng-repeat='col in columns' style={{col.cellStyle}} ng-if='col.visible'>" +
             "                   <div ng-if='col.headTemplate' compile='col.headTemplate' cell-template-scope='col.headTemplateScope'></div>" +
             "                   <div ng-if='!col.headTemplate' >{{col.headTemplate || col.displayName || col.field}}</div>" +
-            "               </th>\n" +
-            "           </tr>\n" +
-            "       </thead>\n" +
-            "       <tbody ng-repeat='row in rows'>\n" +
-            "           <tr ng-click='row.initStatus=!row.initStatus'>\n" +
+            "               </th>" +
+            "           </tr>" +
+            "       </thead>" +
+            "       <tbody ng-repeat='row in rows'>" +
+            "           <tr ng-click='row.initStatus=!row.initStatus'>" +
             "               <td colspan='{{columnNumber}}'>" +
             "               <i class='glyphicon panel-icon' ng-class='{\"glyphicon-chevron-down\": row.initStatus, \"glyphicon-chevron-right\": !row.initStatus}'></i><span style='padding-left: 10px'>{{row.category}}</span>" +
-            "               </td>\n" +
-            "           </tr>\n" +
-            "           <tr ng-repeat='item in row.items' ng-show='row.initStatus'>\n" +
+            "               </td>" +
+            "           </tr>" +
+            "           <tr ng-repeat='item in row.items' ng-show='row.initStatus'>" +
             "               <td ng-if='options.enableRowSelection' class='cate-radio-cell'>" +
             "                   <input type='checkbox' ng-model='item.selection' ng-click='selectRow(row)'>" +
             "               </td>" +
-            "               <td ng-repeat='col in columns' style='word-break:break-all;' ng-if='col.visible'>\n" +
-            "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +
-            "                   <div ng-if='!col.cellTemplate'>{{ item[col.field] }}</div>\n" +
-            "               </td>\n" +
-            "           </tr>\n" +
-            "       </tbody>\n" +
-            "   </table>\n" +
-            "" +
-            "</div>\n"
+            "               <td ng-repeat='col in columns' style='word-break:break-all;' ng-if='col.visible' title='{{ item[col.field] }}'>" +
+            "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>" +
+            "                   <div ng-if='!col.cellTemplate'>{{ item[col.field] }}</div>" +
+            "               </td>" +
+            "           </tr>" +
+            "       </tbody>" +
+            "   </table>" +
+            "</div>"
         }
     })
     .directive('compile', [
         '$compile',
         function ($compile) {
             return {
+                /*require: '^form',*/
                 restrict: 'A',
                 link    : function (scope, element, attrs) {
                     scope.cellTemplateScope = scope.$eval(attrs.cellTemplateScope);
                     // Watch for changes to expression.
                     scope.$watch(attrs.compile, function (new_val) {
-                        // Compile creates a linking function that can be used with any scope.
-                        var link = $compile(new_val);
-                        // Executing the linking function creates a new element.
-                        var new_elem = link(scope);
-                        // Which we can then append to our DOM element.
-                        element.append(new_elem);
+                        /*// Compile creates a linking function that can be used with any scope.
+                         var link = $compile(new_val);
+                         // Executing the linking function creates a new element.
+                         var new_elem = link(scope);
+                         // Which we can then append to our DOM element.
+                         element.append(new_elem);*/
+                        var new_element = angular.element(new_val);
+                        element.append(new_element);
+                        $compile(new_element)(scope);
                     });
                 }
             };

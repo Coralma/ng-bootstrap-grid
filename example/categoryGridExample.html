@@ -2,6 +2,7 @@
 <html ng-app="myApp">
 <head>
     <script src="../lib/angular/angular.js"></script>
+    <script src="../lib/angular-sanitize/angular-sanitize.js"></script>
     <script src="../lib/lodash/lodash.js"></script>
     <script src="../dist/ng-bootstrap-category-grid.js"></script>
     <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
@@ -12,41 +13,48 @@
     <div class="container-fluid" ng-controller="MyController">
         <h1>Category Grid</h1>
         <category-grid options="gridOptions" on-select="rowSelect"></category-grid>
+        <button class="btn btn-default" ng-click="add()" type="button">Add</button>
+        <button class="btn btn-default" ng-click="delete()" type="button">Delete</button>
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
         <p>{{resultData}}</p>
     </div>
 </form>
 <script type="text/javascript">
-    var myApp = angular.module('myApp', ['ng-bootstrap-grid']);
+    var myApp = angular.module('myApp', ['ngSanitize','ng-bootstrap-grid']);
 
     myApp.controller('MyController', ['$scope', function($scope) {
         $scope.gridOptions = {
             enableRowSelection: true,
-            columns : [
+            columnDefs : [
+                {displayName: 'IndexOrder', field:'indexOrder', enableSorting: true},
                 {displayName: 'FirstName', field:'firstName',cellStyle: "width:25%", cellTemplate:'<input type="text" class="form-control" ng-model="item[col.field]">'},
-                {displayName: 'LastName', field:'lastName', cellTemplate:'<a href="" ng-click="cellTemplateScope.canEdit(row)">{{item[col.field]}}</a>', cellTemplateScope: {
+/*                {displayName: 'LastName', field:'lastName', cellTemplate:'<a href="" ng-click="cellTemplateScope.canEdit(row)">{{item[col.field]}}</a>', cellTemplateScope: {
                     canEdit : function(row){
                         console.log(JSON.stringify(row));
                         return true;
                     }
-                }},
+                }},*/
+                {displayName: 'LastName', field:'lastName', cellTemplate:'<a href="" ng-click="appScope.showData(item)">{{item[col.field]}}</a>'},
                 {displayName: 'Company', field:'company', category:true},
                 {displayName: 'Employed', field:'employed', cellTemplate:'<input type="checkbox" ng-model="item[col.field]">' }
             ],
             data : [
                 {
+                    "indexOrder": "2",
                     "firstName": "Cox",
                     "lastName": "Carney",
                     "company": "Enormo",
                     "employed": true
                 },
                 {
+                    "indexOrder": "3",
                     "firstName": "Lorraine",
                     "lastName": "Wise",
                     "company": "Comveyer",
                     "employed": false
                 },
                 {
+                    "indexOrder": "1",
                     "firstName": "Nancy",
                     "lastName": "Waters",
                     "company": "Enormo",
@@ -63,6 +71,21 @@
         $scope.rowSelect = function(row) {
             console.log('run row select');
         }
+
+        $scope.showData = function(row) {
+            console.log('showData', JSON.stringify(row));
+        }
+
+        $scope.add = function() {
+            $scope.gridOptions.data.push({
+                "indexOrder": _.random(500),
+                "firstName": "F" + _.random(500),
+                "lastName": "L" + _.random(500),
+                "company": "C" +_.random(500),
+                "employed": true
+            });
+        }
+        $scope.testData = "Test Data";
     }]);
 </script>
 </body>
