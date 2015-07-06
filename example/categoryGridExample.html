@@ -18,7 +18,7 @@
 <body>
 <form name="form">
     <div class="container-fluid" ng-controller="MyController">
-        <h1>Category Grid</h1>
+        <h3>Category Grid</h3>
         <category-grid options="gridOptions" on-select="rowSelect"></category-grid>
         <button class="btn btn-default" ng-click="add()" type="button">Add</button>
         <button class="btn btn-default" ng-click="delete()" type="button">Delete</button>
@@ -32,7 +32,7 @@
     myApp.controller('MyController', ['$scope', function($scope) {
         $scope.gridOptions = {
             enableRowSelection: true,
-            enableCategory:false,
+            enableCategory:true,
             columnDefs : [
                 {displayName: 'IndexOrder', field:'indexOrder', enableSorting: true},
                 {displayName: 'FirstName', field:'firstName', cellTemplate:'<input type="text" ng-model="item[col.field]" style="width:100%;">'},
@@ -51,8 +51,11 @@
             },
             data : [
                 {"indexOrder": "2","firstName": "Cox", "lastName": "Carney", "company": "Enormo", "employed": true, "type":'1'},
-                {"indexOrder": "3","firstName": "Lorraine", "lastName": "Wise", "company": "Comveyer", "employed": false, "type":'3'},
-                {"indexOrder": "1", "firstName": "Nancy", "lastName": "Waters", "company": "Enormo", "employed": false, "type":'2'}
+                {"indexOrder": "4","firstName": "Lorraine", "lastName": "Wise", "company": "Comveyer", "employed": false, "type":'3'},
+                {"indexOrder": "1", "firstName": "Nancy", "lastName": "Waters", "company": "Enormo", "employed": false, "type":'2'},
+                {"indexOrder": "3", "firstName": "Coral", "lastName": "Ma", "company": "Enormo", "employed": false, "type":'2'},
+                {"indexOrder": "5", "firstName": "Angela", "lastName": "Zero", "company": "Comveyer", "employed": true, "type":'2'},
+                {"indexOrder": "6", "firstName": "Luis", "lastName": "Raca", "company": "Comveyer", "employed": true, "type":'2'},
             ]
         }
 
