@@ -26,6 +26,7 @@
     "angular": "~1.4.1",
     "lodash": "~3.9.3",
     "bootstrap": "~3.3.4",
-    "angular-sanitize": "~1.4.1"
+    "angular-sanitize": "~1.4.1",
+    "ng-context-menu": "~1.0.1"
   }
 }

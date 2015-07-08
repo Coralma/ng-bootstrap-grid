@@ -7,6 +7,7 @@
     <script src="../dist/ng-bootstrap-expand-grid.js"></script>
     <script src="../dist/ng-grid-menu.js"></script>
     <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../dist/css/ng-bootstrap-grid.css">
     <style>
         .inlineForm tr {
             height:42px;
@@ -35,6 +36,7 @@
     myApp.controller('MyController', ['$scope', function($scope) {
         $scope.gridOptions = {
             enableRowSelection: true,
+            enableSingleExpand: true,
             expandableRowTemplate: 'expandForm.html',
             columns : [
                 {displayName: 'FirstName', field:'firstName',cellStyle: "width:25%"},

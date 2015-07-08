@@ -1,5 +1,5 @@
 angular.module('ng-bootstrap-grid', [])
-    .directive('paginationGrid', function() {
+    .directive('paginationGrid', function () {
         return {
             restrict: 'E',
             replace: true,
@@ -7,10 +7,10 @@ angular.module('ng-bootstrap-grid', [])
                 options: '=',
                 onSelect: '=',
                 onPaginationChange: '=',
-                onPaginationBegin:'=',
-                onPaginationEnd:'='
+                onPaginationBegin: '=',
+                onPaginationEnd: '='
             },
-            link : function (scope, element, attrs) {
+            link: function (scope, element, attrs) {
                 scope.columns = scope.options.columns;
                 scope.maxColumnNum = scope.columns.length - 1;
                 scope.columnNumber = scope.options.columns.length + 1; //FIXME it remove the hidden column and selection function.
@@ -26,22 +26,21 @@ angular.module('ng-bootstrap-grid', [])
                  }
                  }*/
 
-                scope.selectAll = function(isSelectAll) {
+                scope.selectAll = function (isSelectAll) {
                     console.log(isSelectAll);
                     var rows = scope.data;
-                    for(var i=0; i < rows.length; i++) {
+                    for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
                         row.selection = isSelectAll;
                     }
                 };
-                scope.selectRow = function(row) {
-                    if(scope.onSelect) {
+                scope.selectRow = function (row) {
+                    if (scope.onSelect) {
                         scope.onSelect(row);
                     }
                 }
             },
-            template:
-            "<div class='table-responsive'>\n" +
+            template: "<div class='table-responsive'>\n" +
             "   <table class='table table-bordered table-hover table-striped'>\n" +
             "       <thead>\n" +
             "           <tr>\n" +
@@ -67,27 +66,39 @@ angular.module('ng-bootstrap-grid', [])
             "           <tr ng-if='data == null || data.length == 0'>" +
             "               <td colspan='{{columnNumber}}'>{{options.noDataMessage}}</td>" +
             "           </tr>" +
+            "           <tr><td colspan='{{columnNumber}}'>" +
+            "               <nav class='page-nav'>\n" +
+            "               <ul class='pagination'>\n" +
+            "                   <li>\n" +
+            "                       <a href='#' aria-label='Previous' class='not-active'>\n" +
+            "                           <span aria-hidden='true' class='glyphicon glyphicon-step-backward'></span>\n" +
+            "                       </a>\n" +
+            "                   </li>\n" +
+            "                   <li>\n" +
+            "                       <a href='#' aria-label='Previous' class='not-active'>\n" +
+            "                           <span aria-hidden='true' class='glyphicon glyphicon-triangle-left'></span>\n" +
+            "                       </a>\n" +
+            "                   </li>\n" +
+            "                   <li><a href=''>1</a></li>\n" +
+            "                   <li><a href=''>2</a></li>\n" +
+            "                   <li><a href=''>3</a></li>\n" +
+            "                   <li><a href=''>4</a></li>\n" +
+            "                   <li><a href=''>5</a></li>\n" +
+            "                   <li>\n" +
+            "                       <a href='' aria-label='Next'>\n" +
+            "                           <span aria-hidden='true' class='glyphicon glyphicon-triangle-right'></span>\n" +
+            "                       </a>\n" +
+            "                   </li>\n" +
+            "                   <li>\n" +
+            "                       <a href='' aria-label='Next'>\n" +
+            "                           <span aria-hidden='true' class='glyphicon glyphicon-step-forward'></span>\n" +
+            "                       </a>\n" +
+            "                   </li>\n" +
+            "               </ul>\n" +
+            "               </nav>" +
+            "           </td></tr>" +
             "       </tbody>\n" +
             "   </table>\n" +
-            "   <nav class='page-nav'>\n" +
-            "       <ul class='pagination'>\n" +
-            "           <li>\n" +
-            "               <a href='#' aria-label='Previous'>\n" +
-            "                   <span aria-hidden='true'>&laquo;</span>\n" +
-            "               </a>\n" +
-            "           </li>\n" +
-            "           <li><a href=''>1</a></li>\n" +
-            "           <li><a href=''>2</a></li>\n" +
-            "           <li><a href=''>3</a></li>\n" +
-            "           <li><a href=''>4</a></li>\n" +
-            "           <li><a href=''>5</a></li>\n" +
-            "           <li>\n" +
-            "               <a href='' aria-label='Next'>\n" +
-            "                   <span aria-hidden='true'>&raquo;</span>\n" +
-            "               </a>\n" +
-            "           </li>\n" +
-            "       </ul>\n" +
-            "   </nav>" +
             "</div>\n"
         }
     })
@@ -96,7 +107,7 @@ angular.module('ng-bootstrap-grid', [])
         function ($compile) {
             return {
                 restrict: 'A',
-                link    : function (scope, element, attrs) {
+                link: function (scope, element, attrs) {
                     scope.cellTemplateScope = scope.$eval(attrs.cellTemplateScope);
                     // Watch for changes to expression.
                     scope.$watch(attrs.compile, function (new_val) {
@@ -116,7 +127,7 @@ angular.module('ng-bootstrap-grid', [])
         function ($compile) {
             return {
                 restrict: 'A',
-                link    : function (scope, element, attrs) {
+                link: function (scope, element, attrs) {
                     scope.cellTemplateScope = scope.$eval(attrs.cellTemplateScope);
                     // Watch for changes to expression.
                     scope.$watch(attrs.compile, function (new_val) {

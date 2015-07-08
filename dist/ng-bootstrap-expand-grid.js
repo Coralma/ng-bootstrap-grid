@@ -35,12 +35,14 @@ angular.module('ng-bootstrap-grid', [])
                     console.log('select a row.');
                 }
                 scope.expandClick = function(clickedRow) {
-                    _.forEach(scope.rows, function(row) {
-                        if(row != clickedRow) {
-                            row.expand = false;
-                            /*row.item.readonly = true;*/
-                        }
-                    });
+                    if(scope.options.enableSingleExpand) {
+                        _.forEach(scope.rows, function(row) {
+                            if(row != clickedRow) {
+                                row.expand = false;
+                                /*row.item.readonly = true;*/
+                            }
+                        });
+                    }
                 }
 
                 scope.getUrlTemplate = function () {
@@ -89,12 +91,9 @@ angular.module('ng-bootstrap-grid', [])
                     scope.cellTemplateScope = scope.$eval(attrs.cellTemplateScope);
                     // Watch for changes to expression.
                     scope.$watch(attrs.compile, function (new_val) {
-                        // Compile creates a linking function that can be used with any scope.
-                        var link = $compile(new_val);
-                        // Executing the linking function creates a new element.
-                        var new_elem = link(scope);
-                        // Which we can then append to our DOM element.
-                        element.append(new_elem);
+                        var new_element = angular.element(new_val);
+                        element.append(new_element);
+                        $compile(new_element)(scope);
                     });
                 }
             };

@@ -86,3 +86,29 @@
     -webkit-appearance: none;
     width: 100%;
 }
+
+
+.not-active {
+    pointer-events: none;
+    cursor: default;
+    color:#eee !important;
+}
+
+.grid-input {
+    width:100%;
+}
+
+/** ng-context-menu*/
+.pointer {
+    cursor: pointer;
+}
+.highlight {
+    color: #fff;
+    background-color: #3498db;
+}
+.expanded {
+    height: 400px;
+}
+.position-fixed {
+    position: fixed;
+}

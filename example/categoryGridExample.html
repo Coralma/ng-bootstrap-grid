@@ -4,7 +4,9 @@
     <script src="../lib/angular/angular.js"></script>
     <script src="../lib/angular-sanitize/angular-sanitize.js"></script>
     <script src="../lib/lodash/lodash.js"></script>
+    <script src="../lib/ng-context-menu/dist/ng-context-menu.js"></script>
     <script src="../dist/ng-bootstrap-category-grid.js"></script>
+    <!--<script src="../dist/ng-gridcell-compiler.js"></script>-->
     <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="../dist/css/ng-bootstrap-grid.css">
 
@@ -25,9 +27,35 @@
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
         <p>{{resultData}}</p>
     </div>
+
+    <div context-menu class="panel panel-default position-fixed"
+         ng-class="{ 'highlight': highlight, 'expanded' : expanded }">
+        <div class="dropdown position-fixed" id="rowMenu">
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a class="pointer" role="menuitem" tabindex="1"
+                       ng-click="panel.highlight = true">
+                        Menu 1
+                    </a>
+                </li>
+                <li>
+                    <a class="pointer" role="menuitem" tabindex="2"
+                       ng-click="panel.highlight = false">
+                        Menu 2
+                    </a>
+                </li>
+                <li>
+                    <a class="pointer" role="menuitem" tabindex="3"
+                       ng-click="panel.highlight = false">
+                        Menu 3
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </form>
 <script type="text/javascript">
-    var myApp = angular.module('myApp', ['ngSanitize','ng-bootstrap-grid']);
+    var myApp = angular.module('myApp', ['ng-context-menu','ng-bootstrap-grid']);
 
     myApp.controller('MyController', ['$scope', function($scope) {
         $scope.gridOptions = {

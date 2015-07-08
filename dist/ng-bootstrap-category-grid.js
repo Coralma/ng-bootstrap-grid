@@ -105,12 +105,17 @@ angular.module('ng-bootstrap-grid', [])
                 // init category
                 scope.categoryData(scope.data);
                 // init explore api
-                scope.options.onRegisterApi({
-                    refresh :  function() {scope.categoryData(scope.data)},
-                    getSelectedRows : function() {
-                        return scope.getSelectedRows();
-                    }
-                });
+                if(scope.options.onRegisterApi) {
+                    scope.options.onRegisterApi({
+                        refresh :  function() {scope.categoryData(scope.data)},
+                        getSelectedRows : function() {
+                            return scope.getSelectedRows();
+                        }
+                    });
+                }
+                scope.onRightClick = function(item) {
+                    console.log('right click entity: '+ JSON.stringify(item, null, '\t'));
+                }
             },
             template:
             "<div class='table-responsive'>" +
@@ -132,7 +137,7 @@ angular.module('ng-bootstrap-grid', [])
             "               <i class='glyphicon panel-icon' ng-class='{\"glyphicon-chevron-down\": row.initStatus, \"glyphicon-chevron-right\": !row.initStatus}'></i><span style='padding-left: 10px'>{{row.category}}</span>" +
             "               </td>" +
             "           </tr>" +
-            "           <tr ng-repeat='item in row.items' ng-show='row.initStatus'>" +
+            "           <tr ng-repeat='item in row.items' ng-show='row.initStatus' context-menu='onRightClick(item)' data-target='rowMenu'>" +
             "               <td ng-if='options.enableRowSelection' class='cate-radio-cell'>" +
             "                   <input type='checkbox' ng-model='item.selection' ng-click='selectRow(row)'>" +
             "               </td>" +
