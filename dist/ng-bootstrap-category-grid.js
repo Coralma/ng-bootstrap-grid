@@ -5,7 +5,8 @@ angular.module('ng-bootstrap-grid', [])
             replace: true,
             scope: {
                 options: '=',
-                onSelect: '='
+                onSelect: '=',
+                rowRightClick: '='
             },
             link : function (scope, element, attrs) {
                 scope.enableCategory = true;
@@ -15,31 +16,41 @@ angular.module('ng-bootstrap-grid', [])
                 scope.categoryData = function(data) {
                     if(!angular.isUndefined(scope.options.enableCategory)) {
                         scope.enableCategory = scope.options.enableCategory;
+                    } else {
+                        scope.enableCategory = true;
                     }
                     var categoryRows = [],item = data[0], categorys=[], len = data.length, i = 0;
                     var categoryField = getCategoryField(scope.options.columnDefs);
                     /*console.log("categoryColumn : "+ JSON.stringify(categoryField));*/
                     initColumn();
                     data = sortData(data);
-                    while(i < len) {
-                        item = data[i++];
-                        var value = item[categoryField];
-                        categorys.push(value);
-                    }
-                    var uniqCategorys = _.uniq(categorys);
-                    var ucLen = uniqCategorys.length, j = 0, uniqCategoryItem = uniqCategorys[0];
-                    /*console.log("uniqCategorys: " + JSON.stringify(uniqCategorys) + ", ucLen: " + ucLen);*/
-                    while(j < ucLen) {
-                        uniqCategoryItem = uniqCategorys[j++];
-                        var categoryRow= {};
-                        categoryRow.category = uniqCategoryItem;
+                    if(scope.enableCategory) {
+                        while (i < len) {
+                            item = data[i++];
+                            var value = item[categoryField];
+                            categorys.push(value);
+                        }
+                        var uniqCategorys = _.uniq(categorys);
+                        var ucLen = uniqCategorys.length, j = 0, uniqCategoryItem = uniqCategorys[0];
+                        /*console.log("uniqCategorys: " + JSON.stringify(uniqCategorys) + ", ucLen: " + ucLen);*/
+                        while (j < ucLen) {
+                            uniqCategoryItem = uniqCategorys[j++];
+                            var categoryRow = {};
+                            categoryRow.category = uniqCategoryItem;
+                            categoryRow.selection = false;
+                            categoryRow.initStatus = true;
+                            categoryRow.items = _.filter(data, function (item) {
+                                return item[categoryField] == uniqCategoryItem;
+                            });
+                            categoryRows.push(categoryRow);
+                            /*console.log(JSON.stringify(categoryRow.items));*/
+                        }
+                    } else {
+                        var categoryRow = {};
                         categoryRow.selection = false;
                         categoryRow.initStatus = true;
-                        categoryRow.items = _.filter(data, function(item) {
-                            return item[categoryField] == uniqCategoryItem;
-                        });
+                        categoryRow.items = data;
                         categoryRows.push(categoryRow);
-                        /*console.log(JSON.stringify(categoryRow.items));*/
                     }
                     scope.rows = categoryRows;
                     /*console.log(JSON.stringify(scope.rows, null, '\t'));*/
@@ -114,7 +125,10 @@ angular.module('ng-bootstrap-grid', [])
                     });
                 }
                 scope.onRightClick = function(item) {
-                    console.log('right click entity: '+ JSON.stringify(item, null, '\t'));
+                    /*console.log('right click entity: '+ JSON.stringify(item, null, '\t'));*/
+                    if(scope.rowRightClick) {
+                        scope.rowRightClick(item);
+                    }
                 }
             },
             template:

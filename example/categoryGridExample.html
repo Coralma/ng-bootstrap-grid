@@ -58,6 +58,10 @@
     var myApp = angular.module('myApp', ['ng-context-menu','ng-bootstrap-grid']);
 
     myApp.controller('MyController', ['$scope', function($scope) {
+        $scope.rightClick = function(item) {
+            console.log('ctrl right click entity: '+ JSON.stringify(item, null, '\t'));
+        }
+
         $scope.gridOptions = {
             enableRowSelection: true,
             enableCategory:true,
