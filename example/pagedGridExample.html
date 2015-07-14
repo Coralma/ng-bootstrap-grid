@@ -1,0 +1,72 @@
+<!doctype html>
+<html ng-app="myApp">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+    <script src="../lib/angular/angular.js"></script>
+    <script src="../lib/lodash/lodash.js"></script>
+    <script src="../dist/ng-bootstrap-grid.js"></script>
+    <script src="../dist/ng-bootstrap-category-grid.js"></script>
+    <script src="../dist/ng-bootstrap-expand-grid.js"></script>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../dist/css/ng-bootstrap-grid.css">
+    <style>
+        body {
+            font-size: 12px;
+        }
+        /*.paged-grid-num-link:hover {
+            border: 1px solid #ccc;
+            text-decoration: none;
+        }*/
+    </style>
+</head>
+<body>
+<form name="form">
+    <div class="container-fluid" ng-controller="MyController">
+        <h1>Pagination Grid</h1>
+        <bs-grid options="gridOptions" on-select="rowSelect" on-pagination-change="pageChange"></bs-grid>
+        <!--<pagination-grid options="gridOptions" on-select="rowSelect"></pagination-grid>-->
+        <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
+        <p>{{resultData}}</p>
+    </div>
+</form>
+<script type="text/javascript">
+    var myApp = angular.module('myApp', ['ng-bootstrap-grid']);
+
+    myApp.controller('MyController', ['$scope', function($scope) {
+        $scope.gridOptions = {
+            paginationPageSizes: [5, 10, 15],
+            paginationPageSize: 10,
+            useExternalPagination: true,
+            enableRowSelection: true,
+            enableGridMenu: true,
+            noDataMessage: '没有找到匹配的结果',
+            columnDefs : [
+                {displayName: 'FirstName', field:'firstName',enableSorting: true},
+                {displayName: 'LastName', field:'lastName',cellStyle: "width:200px", enableSorting: true,cellTemplate: "<a href=''>{{ item[col.field] }}</a>"},
+                {displayName: 'Company', field:'company',cellStyle: "width:200px", cellTemplate : "<div class='ui-grid-cell-contents'><a ng-href='javascript:void(0)' ng-click='appScope.openClaim(grid, row)'>{{item[col.field]}}</a></div>"},
+                {displayName: 'Employed', field:'employed',cellStyle: "width:200px"}
+            ],
+            data : [
+                {"firstName": "Cox","lastName": "Carney","company": "Enormo","employed": true},
+                {"firstName": "Lorraine","lastName": "Wise","company": "Comveyer","employed": false},
+                {"firstName": "Nancy","lastName": "Waters","company": "Enormo","employed": false}
+            ]
+        }
+        /*$scope.gridOptions.totalItems = 213;
+
+        $scope.submitData = function() {
+            $scope.resultData = $scope.gridOptions.data;
+            console.log(JSON.stringify($scope.gridOptions.data, null, '\t'));
+        }*/
+
+        $scope.rowSelect = function(row) {
+            console.log('run row select');
+        }
+
+        $scope.pageChange = function(pageIndex, pageSize) {
+            console.log('The pageIndex is ' + pageIndex + ' and the pageNum of on-pagination-change is : ' + pageSize)
+        }
+    }]);
+</script>
+</body>
+</html>

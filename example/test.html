@@ -1,0 +1,74 @@
+<html>
+<head>
+    <link rel="stylesheet" href="http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.js"></script>
+    <script src="http://code.angularjs.org/1.2.6/angular.min.js"></script>
+
+
+    <title>QTIP Angular Demo</title>
+</head>
+<body ng-app="app">
+<script type="text/ng-template" id="bubble.html">
+    <div>
+        <div class="hoverInfo">
+            <div class="nameAndInfo withPresence">
+                <a href="#" class="name">{{text}}</a>
+            </div>
+        </div>
+    </div>
+</script>
+
+<ul ng-controller="ctrl">
+    <li
+            ng-repeat="actor in actors"
+            qtip="actor"
+            >{{actor}}
+    </li>
+</ul>
+
+<script>
+
+    angular
+            .module("app", [])
+            .value("actors", [
+                "John Doe",
+                "Doe Johns",
+                "Johnny Doe",
+                "Doe John"
+            ])
+            .controller("ctrl", function ($scope, actors) {
+                $scope.actors = actors;
+            })
+            .directive("qtip", function ($compile, $templateCache) {
+                var clone = $compile($templateCache.get("bubble.html"));
+
+                function link(scope, el, attr) {
+                    el.qtip({
+                        position: {
+                            at: "bottom left"
+                        },
+                        style: {
+                            tip: {
+                                corner: "top center"
+                            }
+                        },
+                        content: {
+                            text: function () {
+                                return scope.$apply(function () {
+                                    return clone(scope);
+                                });
+                            }
+                        }
+                    });
+                }
+                return {
+                    link: link,
+                    scope: {
+                        text: "=qtip"
+                    }
+                };
+            });
+</script>
+</body>
+</html>
