@@ -1,4 +1,4 @@
-angular.module('ng-bootstrap-grid', [])
+angular.module('ng-bootstrap-category-grid', [])
     .directive('categoryGrid', function() {
         return {
             restrict: 'E',

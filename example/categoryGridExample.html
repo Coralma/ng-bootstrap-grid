@@ -2,6 +2,7 @@
 <html ng-app="myApp">
 <head>
     <script src="../lib/angular/angular.js"></script>
+    <script src="../lib/jquery/dist/jquery.js"></script>
     <script src="../lib/angular-sanitize/angular-sanitize.js"></script>
     <script src="../lib/lodash/lodash.js"></script>
     <script src="../lib/ng-context-menu/dist/ng-context-menu.js"></script>
@@ -27,6 +28,8 @@
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
         <p>{{resultData}}</p>
     </div>
+
+    <div id="infoDiv" style="display: none; background-color: #00b3ee;">The example div for popup div to display</div>
 
     <div context-menu class="panel panel-default position-fixed"
          ng-class="{ 'highlight': highlight, 'expanded' : expanded }">
@@ -55,11 +58,15 @@
     </div>
 </form>
 <script type="text/javascript">
-    var myApp = angular.module('myApp', ['ng-context-menu','ng-bootstrap-grid']);
+    var myApp = angular.module('myApp', ['ng-context-menu','ng-bootstrap-category-grid']);
 
     myApp.controller('MyController', ['$scope', function($scope) {
         $scope.rightClick = function(item) {
             console.log('ctrl right click entity: '+ JSON.stringify(item, null, '\t'));
+        }
+
+        $scope.over = function(link) {
+            console.log('mouse over' + link);
         }
 
         $scope.gridOptions = {
@@ -68,7 +75,7 @@
             columnDefs : [
                 {displayName: 'IndexOrder', field:'indexOrder', enableSorting: true},
                 {displayName: 'FirstName', field:'firstName', cellTemplate:'<input type="text" ng-model="item[col.field]" style="width:100%;">'},
-                {displayName: 'LastName', field:'lastName', cellTemplate:'<a href="" ng-click="appScope.showData(item)">{{item[col.field]}}</a>'},
+                {displayName: 'LastName', field:'lastName', cellTemplate:'<over-div title="item[col.field]"></over-div>'},
                 {displayName: 'Company', field:'company', category:true},
                 {displayName: 'Employed', field:'employed', cellTemplate:'<input type="checkbox" ng-model="item[col.field]">' },
                 {displayName: 'Type', field:'type',
@@ -118,7 +125,29 @@
             console.log(JSON.stringify($scope.gridApi.getSelectedRows()));
         }
         $scope.testData = "Test Data";
-    }]);
+    }])
+    .directive('overDiv', function () {
+        return {
+            restrict: 'EA',
+            replace: true,
+            scope: {
+                title: '='
+            },
+            link: function(scope, element, attrs) {
+                element.on('mouseenter', function(e) {
+                    var offest = element[0].offsetParent;
+                    console.log("left: " + offest.offsetLeft + " , top: " + offest.offsetTop);
+                    console.log("clientX: " + e.clientX + " , clientY: " + e.clientY);
+                    $('#infoDiv').css({'display' : 'inline', 'position': 'absolute', 'left' : offest.offsetLeft + 20, 'top' : offest.offsetTop + 100});
+                    /*$('#infoDiv').css({'display' : 'inline', 'position': 'absolute', 'left' : e.clientX, 'top' : e.clientY+20});*/
+                })
+                element.on('mouseleave', function(e) {
+                    $('#infoDiv').css({'display' : 'none'});
+                })
+            },
+            template: '<a href="" >{{ title }}</a>'
+        }
+    });
 </script>
 </body>
 </html>
