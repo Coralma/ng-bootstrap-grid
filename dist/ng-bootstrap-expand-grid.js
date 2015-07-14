@@ -1,4 +1,4 @@
-angular.module('ng-bootstrap-grid', [])
+angular.module('ng-bootstrap-expand-grid', [])
     .directive('expandGrid', [function() {
         return {
             restrict: 'E',
