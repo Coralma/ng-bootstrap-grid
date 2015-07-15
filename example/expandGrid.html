@@ -23,7 +23,7 @@
 <body>
 <form name="form">
     <div class="container-fluid" ng-controller="MyController">
-        <h1>Category Grid</h1>
+        <h1>Expand Grid</h1>
         <!--<page-include ext-url="example/expendForm.html"></page-include>-->
         <expand-grid options="gridOptions" grid-menu></expand-grid>
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
@@ -31,7 +31,7 @@
     </div>
 </form>
 <script type="text/javascript">
-    var myApp = angular.module('myApp', ['ng-bootstrap-grid','ng-grid-menu']);
+    var myApp = angular.module('myApp', ['ng-bootstrap-expand-grid','ng-grid-menu']);
 
     myApp.controller('MyController', ['$scope', function($scope) {
         $scope.gridOptions = {

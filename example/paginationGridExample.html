@@ -59,7 +59,7 @@
 <form name="form">
     <div class="container-fluid" ng-controller="MyController">
         <h1>Pagination Grid</h1>
-        <ng-grid options="gridOptions" on-select="rowSelect"></ng-grid>
+        <bs-grid options="gridOptions" on-select="rowSelect"></bs-grid>
         <!--<pagination-grid options="gridOptions" on-select="rowSelect"></pagination-grid>-->
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
         <p>{{resultData}}</p>
@@ -167,7 +167,7 @@
             enableRowSelection: true,
             enableGridMenu: true,
             noDataMessage: '没有找到匹配的结果',
-            columns : [
+            columnDefs : [
                 {displayName: 'FirstName', field:'firstName',cellStyle: "width:25%"},
                 {displayName: 'LastName', field:'lastName'},
                 {displayName: 'Company', field:'company'},
