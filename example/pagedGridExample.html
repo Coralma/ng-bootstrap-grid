@@ -23,9 +23,10 @@
 <form name="form">
     <div class="container-fluid" ng-controller="MyController">
         <h1>Pagination Grid</h1>
-        <bs-grid options="gridOptions" on-select="rowSelect" on-pagination-change="pageChange"></bs-grid>
+        <bs-grid options="gridOptions" on-select="rowSelect" on-pagination-change="pageChange" on-sort-changed="sortChange"></bs-grid>
         <!--<pagination-grid options="gridOptions" on-select="rowSelect"></pagination-grid>-->
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
+        <button class="btn btn-default" ng-click="selectedRows()" type="button">Get Selected Rows</button>
         <p>{{resultData}}</p>
     </div>
 </form>
@@ -38,34 +39,54 @@
             paginationPageSize: 10,
             useExternalPagination: true,
             enableRowSelection: true,
-            enableGridMenu: true,
+            enableGridMenu: false,
             noDataMessage: '没有找到匹配的结果',
+            onRegisterApi : function(gridApi){
+                $scope.gridApi = gridApi;
+            },
             columnDefs : [
                 {displayName: 'FirstName', field:'firstName',enableSorting: true},
-                {displayName: 'LastName', field:'lastName',cellStyle: "width:200px", enableSorting: true,cellTemplate: "<a href=''>{{ item[col.field] }}</a>"},
+                {displayName: 'LastName', field:'lastName',cellStyle: "width:200px",cellTemplate: "<a href=''>{{ item[col.field] }}</a>"},
                 {displayName: 'Company', field:'company',cellStyle: "width:200px", cellTemplate : "<div class='ui-grid-cell-contents'><a ng-href='javascript:void(0)' ng-click='appScope.openClaim(grid, row)'>{{item[col.field]}}</a></div>"},
-                {displayName: 'Employed', field:'employed',cellStyle: "width:200px"}
+                {displayName: 'Employed', field:'employed',cellStyle: "width:200px",enableSorting: false }
             ],
             data : [
                 {"firstName": "Cox","lastName": "Carney","company": "Enormo","employed": true},
                 {"firstName": "Lorraine","lastName": "Wise","company": "Comveyer","employed": false},
-                {"firstName": "Nancy","lastName": "Waters","company": "Enormo","employed": false}
+                {"firstName": "Nancy","lastName": "Eric","company": "Enormo","employed": false},
+                {"firstName": "Lora","lastName": "Karl","company": "Comveyer","employed": true},
+                {"firstName": "Angel","lastName": "Pete","company": "Enormo","employed": false},
+                {"firstName": "Babala","lastName": "Mildred","company": "Comveyer","employed": true},
+                {"firstName": "Wind","lastName": "Owen","company": "Comveyer","employed": true},
+                {"firstName": "Iris","lastName": "Lee","company": "Comveyer","employed": true},
+                {"firstName": "Rocky","lastName": "Alax","company": "Enormo","employed": false},
+                {"firstName": "Muse","lastName": "Dick","company": "Enormo","employed": false}
             ]
         }
-        /*$scope.gridOptions.totalItems = 213;
+        $scope.gridOptions.totalItems = 0;
 
         $scope.submitData = function() {
             $scope.resultData = $scope.gridOptions.data;
             console.log(JSON.stringify($scope.gridOptions.data, null, '\t'));
-        }*/
+        }
 
         $scope.rowSelect = function(row) {
             console.log('run row select');
         }
 
-        $scope.pageChange = function(pageIndex, pageSize) {
-            console.log('The pageIndex is ' + pageIndex + ' and the pageNum of on-pagination-change is : ' + pageSize)
+        $scope.selectedRows = function() {
+            var rows = $scope.gridApi.getSelectedRows();
+            console.log(JSON.stringify(rows));
         }
+
+        $scope.pageChange = function(pageIndex, pageSize) {
+            console.log('The pageIndex is ' + pageIndex + ', pageSize is : ' + pageSize)
+        }
+
+        $scope.sortChange = function(pageIndex, pageSize, sortField, sortType) {
+            console.log('The pageIndex is ' + pageIndex + ', pageSize is ' + pageSize + ", sortField is " + sortField + ", sortType is " + sortType);
+        }
+
     }]);
 </script>
 </body>

@@ -60,10 +60,14 @@
 }
 
 .table > tbody > tr > td {
-    padding: 5px;
+    padding: 4px;
+    line-height: 1.5;
     vertical-align: middle;
 }
-
+.no-data {
+    height: 50px;
+    padding-left: 10px !important;
+}
 .bs-grid {
     margin-top: 5px;
 }

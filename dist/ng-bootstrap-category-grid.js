@@ -67,7 +67,11 @@ angular.module('ng-bootstrap-category-grid', [])
                             index++;
                         }
                     });
-                    scope.columnNumber = index + 1; //FIXME it remove the hidden column and selection function.
+                    if(scope.options.enableRowSelection) {
+                        scope.columnNumber = index + 1;
+                    } else {
+                        scope.columnNumber = index;
+                    }
                 };
                 sortData = function(data) {
                     var sortList = _.filter(scope.columns, function(col) {

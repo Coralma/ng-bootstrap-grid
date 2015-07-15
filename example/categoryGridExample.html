@@ -22,7 +22,7 @@
 <form name="form">
     <div class="container-fluid" ng-controller="MyController">
         <h3>Category Grid</h3>
-        <category-grid options="gridOptions" on-select="rowSelect"></category-grid>
+        <category-grid options="gridOptions" on-select="rowSelect" row-right-click="rightClickEvent"></category-grid>
         <button class="btn btn-default" ng-click="add()" type="button">Add</button>
         <button class="btn btn-default" ng-click="delete()" type="button">Delete</button>
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
@@ -65,6 +65,10 @@
             console.log('ctrl right click entity: '+ JSON.stringify(item, null, '\t'));
         }
 
+        $scope.typeChange = function(item) {
+            console.log('Type Change: '+ JSON.stringify(item, null, '\t'));
+        }
+
         $scope.over = function(link) {
             console.log('mouse over' + link);
         }
@@ -77,9 +81,15 @@
                 {displayName: 'FirstName', field:'firstName', cellTemplate:'<input type="text" ng-model="item[col.field]" style="width:100%;">'},
                 {displayName: 'LastName', field:'lastName', cellTemplate:'<over-div title="item[col.field]"></over-div>'},
                 {displayName: 'Company', field:'company', category:true},
-                {displayName: 'Employed', field:'employed', cellTemplate:'<input type="checkbox" ng-model="item[col.field]">' },
+                {displayName: 'Employed', field:'employed', cellTemplate:'<input type="checkbox" ng-model="item[col.field]" ng-click="cellTemplateScope.changeEmployed(item)">',
+                    cellTemplateScope: {
+                        changeEmployed : function(item) {
+                            console.log(JSON.stringify(item));
+                        }
+                    }
+                },
                 {displayName: 'Type', field:'type',
-                    cellTemplate:'<select ng-model="item[col.field]">' +
+                    cellTemplate:'<select ng-model="item[col.field]" ng-change="appScope.typeChange(item)">' +
                                 '    <option value ="1">Developer</option>' +
                                 '    <option value ="2">Manager</option>' +
                                 '    <option value ="3">Tester</option>' +
