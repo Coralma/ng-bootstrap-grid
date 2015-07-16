@@ -16,7 +16,11 @@ angular.module('ng-bootstrap-grid', [])
                 scope.options.noDataMessage =  scope.options.noDataMessage || '没有找到匹配的结果';
                 scope.columns = scope.options.columnDefs;
                 scope.maxColumnNum = scope.columns.length - 1;
-                scope.columnNumber = scope.options.columnDefs.length + 1; //FIXME it remove the hidden column and selection function.
+                if(scope.options.enableRowSelection) {
+                    scope.columnNumber = scope.options.columnDefs.length + 1; //FIXME it remove the hidden column and selection function.
+                } else {
+                    scope.columnNumber = scope.options.columnDefs.length;
+                }
                 scope.initColumns = function(columns) {
                     _.forEach(columns, function(col) {
                         if(angular.isUndefined(col.enableSorting)) {
@@ -51,20 +55,19 @@ angular.module('ng-bootstrap-grid', [])
                     } else {
                         if(col.sort == null) {
                             sortedData = scope.dataBackup;
-                        } else if(col.sort == 'ace'){
+                        } else if(col.sort == 'asc'){
                             sortedData = _.sortBy(scope.options.data, col.field);
                         } else if(col.sort == 'desc'){
                             sortedData = _.sortBy(scope.options.data, col.field).reverse();
                         }
                         angular.copy(sortedData, scope.options.data);
-                        console.log('sortData');
                     }
                 }
 
                 var checkColSort = function(sort) {
                     if(sort == null) {
-                        return 'ace';
-                    } else if(sort == 'ace') {
+                        return 'asc';
+                    } else if(sort == 'asc') {
                         return 'desc';
                     } else if(sort == 'desc') {
                         return null;
@@ -108,7 +111,7 @@ angular.module('ng-bootstrap-grid', [])
             "               <th ng-repeat='col in columns' style='{{col.cellStyle}}' ng-class='col.enableSorting ? \"sortable-head\" : \"\"' ng-click='sortData(col, columns)'>" +
             "                   <div ng-if='col.headTemplate' compile='col.headTemplate' cell-template-scope='col.headTemplateScope'></div>" +
             "                   <div ng-if='!col.headTemplate' style='display:inline;'>{{col.headTemplate || col.displayName || col.field}}</div>" +
-            "                   <div ng-if='col.sort == \"ace\"' style='display:inline;'><i class='glyphicon' ng-class='\"glyphicon glyphicon-triangle-bottom\"'></i></div>" +
+            "                   <div ng-if='col.sort == \"asc\"' style='display:inline;'><i class='glyphicon' ng-class='\"glyphicon glyphicon-triangle-bottom\"'></i></div>" +
             "                   <div ng-if='col.sort == \"desc\"' style='display:inline;'><i class='glyphicon' ng-class='\"glyphicon glyphicon-triangle-top\"'></i></div>" +
             /*"                   <div ng-if='$index == maxColumnNum && !scope.options.enableGridMenu' class='pull-right' style='display:inline;'><i class='glyphicon' ng-click='' ng-class='\"glyphicon glyphicon-cog\"' style='cursor:pointer;'></i>" +*/
             "                   </div>" +
