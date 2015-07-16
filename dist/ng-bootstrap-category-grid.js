@@ -21,7 +21,6 @@ angular.module('ng-bootstrap-category-grid', [])
                     }
                     var categoryRows = [],item = data[0], categorys=[], len = data.length, i = 0;
                     var categoryField = getCategoryField(scope.options.columnDefs);
-                    /*console.log("categoryColumn : "+ JSON.stringify(categoryField));*/
                     initColumn();
                     data = sortData(data);
                     if(scope.enableCategory) {
@@ -32,7 +31,6 @@ angular.module('ng-bootstrap-category-grid', [])
                         }
                         var uniqCategorys = _.uniq(categorys);
                         var ucLen = uniqCategorys.length, j = 0, uniqCategoryItem = uniqCategorys[0];
-                        /*console.log("uniqCategorys: " + JSON.stringify(uniqCategorys) + ", ucLen: " + ucLen);*/
                         while (j < ucLen) {
                             uniqCategoryItem = uniqCategorys[j++];
                             var categoryRow = {};
