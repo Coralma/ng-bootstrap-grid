@@ -11,7 +11,7 @@ angular.module('ng-bootstrap-category-grid', [])
             link : function (scope, element, attrs) {
                 scope.enableCategory = true;
                 scope.columns = scope.options.columnDefs;
-                scope.data = scope.options.data;
+                /*scope.data = scope.options.data;*/
                 scope.appScope = scope.$parent;
                 scope.categoryData = function(data) {
                     if(!angular.isUndefined(scope.options.enableCategory)) {
@@ -45,6 +45,7 @@ angular.module('ng-bootstrap-category-grid', [])
                         }
                     } else {
                         var categoryRow = {};
+                        categoryRow.category = 'no-category';
                         categoryRow.selection = false;
                         categoryRow.initStatus = true;
                         categoryRow.items = data;
@@ -116,11 +117,11 @@ angular.module('ng-bootstrap-category-grid', [])
                     return selectedRows;
                 }
                 // init category
-                scope.categoryData(scope.data);
+                scope.categoryData(scope.options.data);
                 // init explore api
                 if(scope.options.onRegisterApi) {
                     scope.options.onRegisterApi({
-                        refresh :  function() {scope.categoryData(scope.data)},
+                        refresh :  function() {scope.categoryData(scope.options.data)},
                         getSelectedRows : function() {
                             return scope.getSelectedRows();
                         }
@@ -141,23 +142,23 @@ angular.module('ng-bootstrap-category-grid', [])
             "               <th ng-if='options.enableRowSelection' class='cate-radio-cell'>" +
             "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll'>" +
             "               </th>" +
-            "               <th ng-repeat='col in columns' style={{col.cellStyle}} ng-if='col.visible'>" +
+            "               <th ng-repeat='col in columns track by col.field' style={{col.cellStyle}} ng-if='col.visible'>" +
             "                   <div ng-if='col.headTemplate' compile='col.headTemplate' cell-template-scope='col.headTemplateScope'></div>" +
             "                   <div ng-if='!col.headTemplate' >{{col.headTemplate || col.displayName || col.field}}</div>" +
             "               </th>" +
             "           </tr>" +
             "       </thead>" +
-            "       <tbody ng-repeat='row in rows'>" +
+            "       <tbody ng-repeat='row in rows track by row.category'>" +
             "           <tr ng-click='row.initStatus=!row.initStatus' ng-if='enableCategory'>" +
             "               <td colspan='{{columnNumber}}'>" +
             "               <i class='glyphicon panel-icon' ng-class='{\"glyphicon-chevron-down\": row.initStatus, \"glyphicon-chevron-right\": !row.initStatus}'></i><span style='padding-left: 10px'>{{row.category}}</span>" +
             "               </td>" +
             "           </tr>" +
-            "           <tr ng-repeat='item in row.items' ng-show='row.initStatus' context-menu='onRightClick(item)' data-target='rowMenu'>" +
+            "           <tr ng-repeat='item in row.items track by $id(item)' ng-show='row.initStatus' context-menu='onRightClick(item)' data-target='rowMenu'>" +
             "               <td ng-if='options.enableRowSelection' class='cate-radio-cell'>" +
             "                   <input type='checkbox' ng-model='item.selection' ng-click='selectRow(row)'>" +
             "               </td>" +
-            "               <td ng-repeat='col in columns' style='word-break:break-all;' ng-if='col.visible' title='{{ item[col.field] }}'>" +
+            "               <td ng-repeat='col in columns track by col.field' style='word-break:break-all;' ng-if='col.visible' title='{{ item[col.field] }}'>" +
             "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>" +
             "                   <div ng-if='!col.cellTemplate'>{{ item[col.field] }}</div>" +
             "               </td>" +
