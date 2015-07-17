@@ -13,8 +13,9 @@ angular.module('ng-bootstrap-grid', [])
                 scope.appScope = scope.$parent;
                 scope.dataBackup = angular.copy(scope.options.data);
                 scope.options.useExternalPagination = scope.options.useExternalPagination || false;
-                scope.options.noDataMessage =  scope.options.noDataMessage || '√ª”–’“µΩ∆•≈‰µƒΩ·π˚';
+                scope.options.noDataMessage =  scope.options.noDataMessage || 'Ê≤°ÊúâÊâæÂà∞ÂåπÈÖçÊï∞ÊçÆ';
                 scope.columns = scope.options.columnDefs;
+                _.remove(scope.columns, {'visible':false});
                 scope.maxColumnNum = scope.columns.length - 1;
                 if(scope.options.enableRowSelection) {
                     scope.columnNumber = scope.options.columnDefs.length + 1; //FIXME it remove the hidden column and selection function.
@@ -77,6 +78,7 @@ angular.module('ng-bootstrap-grid', [])
                 var cleanOtherSort = function(col, columns) {
                     _.forEach(columns, function(otherCol) {
                         if(col.field != otherCol.field) {
+
                             otherCol.sort = null;
                         }
                     });
@@ -121,9 +123,9 @@ angular.module('ng-bootstrap-grid', [])
             "       <tbody>\n" +
             "           <tr ng-repeat='item in options.data'>\n" +
             "               <td ng-if='options.enableRowSelection' class='pagination-checkbox'><input type='checkbox' ng-model='item.selection' ng-click='selectRow(row)'></td>" +
-            "               <td ng-repeat='col in columns' >\n" +
+            "               <td ng-repeat='col in columns'>\n" +
             "                   <div ng-if='col.cellTemplate' grid-compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +
-            "                   <div ng-if='!col.cellTemplate'>{{ item[col.field] }}</div>\n" +
+            "                   <div ng-if='!col.cellTemplate' title='{{ item[col.field] }}'>{{ item[col.field] }}</div>\n" +
             "               </td>\n" +
             "           </tr>\n" +
             "           <tr ng-if='options.data == null || options.data.length == 0'>" +
@@ -272,9 +274,9 @@ angular.module('ng-bootstrap-grid', [])
             '   <a href="javascript:void(0)" class="paged-grid-num-link paged-grid-link" ng-if="currentGroup < maxGroup" ng-click="nextGroup()">...</a>' +
             '   <a href="javascript:void(0)" class="glyphicon glyphicon-triangle-right paged-grid-ctrl-link3 paged-grid-link" ng-click="next()" ng-class="(options.currentPage == maxNum || maxNum == 0)?\'not-active\':\'\'"></a>' +
             '   <a href="javascript:void(0)" class="glyphicon glyphicon-step-forward paged-grid-ctrl-link paged-grid-link" ng-click="last()" ng-class="(options.currentPage==maxNum || maxNum == 0)?\'not-active\':\'\'"></a>' +
-            '   <span class="data-count-desc">µ±«∞ {{itemNumberStart()}} - {{itemNumberEnd()}} Ãı£¨◊‹π≤ {{options.totalItems}} Ãı</span>' +
+            '   <span class="data-count-desc">ÂΩìÂâç {{itemNumberStart()}} - {{itemNumberEnd()}} Êù°ÔºåÊÄªÂÖ± {{options.totalItems}} Êù°</span>' +
             '    <div class="pull-right paged-display-list">' +
-            '   <span>√ø“≥œ‘ æ</span>' +
+            '   <span>ÊØèÈ°µÊòæÁ§∫</span>' +
             '        <select ng-model="options.paginationPageSize" ng-options="di for di in options.paginationPageSizes"></select>' +
             '    </div>' +
             '</div>'

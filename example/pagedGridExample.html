@@ -48,7 +48,7 @@
                 {displayName: 'FirstName', field:'firstName',enableSorting: true},
                 {displayName: 'LastName', field:'lastName',cellStyle: "width:200px",cellTemplate: "<a href=''>{{ item[col.field] }}</a>"},
                 {displayName: 'Company', field:'company',cellStyle: "width:200px", cellTemplate : "<div class='ui-grid-cell-contents'><a ng-href='javascript:void(0)' ng-click='appScope.openClaim(grid, row)'>{{item[col.field]}}</a></div>"},
-                {displayName: 'Employed', field:'employed',cellStyle: "width:200px",enableSorting: false }
+                {displayName: 'Employed', field:'employed',cellStyle: "width:200px",enableSorting: false, visible: false }
             ],
             data : [
                 {"firstName": "Cox","lastName": "Carney","company": "Enormo","employed": true},
