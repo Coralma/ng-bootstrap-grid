@@ -6,15 +6,17 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
             priority : 10,
             scope: {
                 options: '=',
-                onSelect: '='
+                onSelect: '=',
+                onExpand: '=',
             },
             link : function (scope, element, attrs) {
                 scope.appScope = scope.$parent;
                 scope.columns = scope.options.columnDefs;
                 scope.maxColumnNum = scope.columns.length - 1;
-                scope.data = scope.options.data;
+                /*scope.data = scope.options.data;*/
                 scope.selectAllFlag = false;
-                scope.$watch('options.data', function(data) {
+                /*scope.$watch('options.data', function(data) {*/
+                scope.initData = function() {
                     var rows = [];
                     /*scope.rows = scope.options.data;*/
                     var data = scope.options.data;
@@ -25,7 +27,8 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
                     scope.rows = rows;
                     scope.columnNumber = scope.options.columnDefs.length + 1; //FIXME it remove the hidden column and selection function.
                     console.log(JSON.stringify(scope.rows, null, '\t'));
-                });
+                };
+                scope.initData();
 
                 scope.selectAll = function(isSelectAll) {
                     console.log(isSelectAll);
@@ -54,11 +57,47 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
                             }
                         });
                     }
+                    scope.onExpand(clickedRow);
                 }
-
+                scope.getSelectedRows = function() {
+                    var selectedRows = [];
+                    _.forEach(scope.rows, function(row) {
+                        if(row.item.selection) {
+                            selectedRows.push(row);
+                        }
+                    });
+                    return selectedRows;
+                }
                 scope.getUrlTemplate = function () {
                     return scope.options.expandableRowTemplate;
                 };
+
+                if(scope.options.onRegisterApi) {
+                    scope.options.onRegisterApi({
+                        refresh :  function() {
+                            scope.initData();
+                        },
+                        addNewItem :  function(data) {
+                            var newRow = {item : data, expand: true, expandTemplate: scope.options.expandableRowTemplate};
+                            scope.rows.push(newRow);
+                            scope.expandClick(newRow);
+                        },
+                        getSelectedRows : function() {
+                            return scope.getSelectedRows();
+                        },
+                        deleteSelectedRows : function() {
+                            var selectedRows = scope.getSelectedRows();
+                            _.remove(scope.options.data, function(data) {
+                                var existedData = _.filter(selectedRows, {'item' : data});
+                                if(existedData.length > 0) {
+                                    _.remove(scope.rows, {'item' : data});
+                                    return true;
+                                }
+                                return false;
+                            });
+                        }
+                    });
+                }
             },
             template:
             "<div class='table-responsive'>\n" +
@@ -75,7 +114,7 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
             "           </tr>\n" +
             "       </thead>\n" +
             "       <tbody ng-repeat='row in rows'>\n" +
-            "           <tr ng-dblclick='row.expand=!row.expand'>\n" +
+            "           <tr ng-dblclick='row.expand=!row.expand;expandClick(row)'>\n" +
             "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'><input type='checkbox' ng-model='row.item.selection' ng-click='selectRow(row)' ng-disabled='row.item.readonly'></td>" +
             "               <td ng-repeat='col in columns' style='word-break:break-all;'>\n" +
             "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +

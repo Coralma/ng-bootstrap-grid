@@ -70,12 +70,18 @@
     background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), color-stop(60%, #f5f5f5), to(#f1f1f1));
     background-image: linear-gradient(#ffffff, #f5f5f5 60%, #f1f1f1);
     background-repeat: no-repeat;
+    -webkit-user-select: none; /* Chrome/Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
 }
 
 .table > tbody > tr > td {
     padding: 4px;
     line-height: 1.2;
     vertical-align: middle;
+    -webkit-user-select: none; /* Chrome/Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
 }
 .no-data {
     height: 50px;
@@ -200,10 +206,10 @@
 /* expand grid */
 .ep-grid td {
     font-size: 12px;
-    line-height: 2.5 !important;
+    line-height: 1 !important;
 }
 
 .ep-grid th {
-    font-size: 14px;
-    line-height: 2.5 !important;
+    font-size: 12px;
+    line-height: 1 !important;
 }
