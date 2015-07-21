@@ -5,7 +5,7 @@
     <script src="../lib/angular/angular.js"></script>
     <script src="../lib/lodash/lodash.js"></script>
     <script src="../dist/ng-bootstrap-expand-grid.js"></script>
-    <script src="../dist/ng-grid-menu.js"></script>
+    <script src="../dist/ng-grid-compiler.js"></script>
     <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="../dist/css/ng-bootstrap-grid.css">
     <style>
@@ -31,14 +31,14 @@
     </div>
 </form>
 <script type="text/javascript">
-    var myApp = angular.module('myApp', ['ng-bootstrap-expand-grid','ng-grid-menu']);
+    var myApp = angular.module('myApp', ['ng-bootstrap-expand-grid']);
 
     myApp.controller('MyController', ['$scope', function($scope) {
         $scope.gridOptions = {
             enableRowSelection: true,
             enableSingleExpand: true,
             expandableRowTemplate: 'expandForm.html',
-            columns : [
+            columnDefs : [
                 {displayName: 'FirstName', field:'firstName',cellStyle: "width:25%"},
                 {displayName: 'LastName', field:'lastName'},
                 {displayName: 'Company', field:'company', category:true},

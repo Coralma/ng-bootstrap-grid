@@ -1,12 +1,13 @@
 <!doctype html>
 <html ng-app="myApp">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
     <script src="../lib/angular/angular.js"></script>
     <script src="../lib/lodash/lodash.js"></script>
     <script src="../dist/ng-bootstrap-grid.js"></script>
     <script src="../dist/ng-bootstrap-category-grid.js"></script>
     <script src="../dist/ng-bootstrap-expand-grid.js"></script>
+    <script src="../dist/ng-grid-compiler.js"></script>
+
     <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="../dist/css/ng-bootstrap-grid.css">
     <style>
@@ -36,11 +37,11 @@
     myApp.controller('MyController', ['$scope', function($scope) {
         $scope.gridOptions = {
             paginationPageSizes: [5, 10, 15],
-            paginationPageSize: 10,
+            paginationPageSize: 5,
             useExternalPagination: true,
             enableRowSelection: true,
             enableGridMenu: false,
-            noDataMessage: '没有找到匹配的结果',
+            noDataMessage: '娌℃湁鎵惧埌鍖归厤鐨勭粨鏋�',
             onRegisterApi : function(gridApi){
                 $scope.gridApi = gridApi;
             },

@@ -1,4 +1,4 @@
-angular.module('ng-bootstrap-grid', [])
+angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
     .directive('bsGrid', function () {
         return {
             restrict: 'E',
@@ -15,6 +15,7 @@ angular.module('ng-bootstrap-grid', [])
                 scope.options.useExternalPagination = scope.options.useExternalPagination || false;
                 scope.options.noDataMessage =  scope.options.noDataMessage || '没有找到匹配数据';
                 scope.columns = scope.options.columnDefs;
+                scope.selectAllFlag = false;
                 _.remove(scope.columns, {'visible':false});
                 scope.maxColumnNum = scope.columns.length - 1;
                 if(scope.options.enableRowSelection) {
@@ -36,11 +37,17 @@ angular.module('ng-bootstrap-grid', [])
                         var row = rows[i];
                         row.selection = isSelectAll;
                     }
+                    scope.selectAllFlag = isSelectAll;
                 };
                 scope.selectRow = function (row) {
                     if (scope.onSelect) {
                         scope.onSelect(row);
                     }
+                    //checkbox的全选和全不选的问题
+                    var uncheckedRow=_.find(scope.options.data,function(row){
+                        return row.selection==false || row.selection==null;
+                    });
+                    scope.selectAllFlag = (uncheckedRow==null);
                 }
                 scope.sortData = function(col, columns) {
                     if(!col.enableSorting) {
@@ -107,8 +114,8 @@ angular.module('ng-bootstrap-grid', [])
             "   <table class='table table-bordered table-hover table-striped'>\n" +
             "       <thead>\n" +
             "           <tr>\n" +
-            "               <th ng-if='options.enableRowSelection' class='pagination-checkbox'>" +
-            "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll'>" +
+            "               <th ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
+            "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll' ng-checked='selectAllFlag'>" +
             "               </th>" +
             "               <th ng-repeat='col in columns' style='{{col.cellStyle}}' ng-class='col.enableSorting ? \"sortable-head\" : \"\"' ng-click='sortData(col, columns)'>" +
             "                   <div ng-if='col.headTemplate' compile='col.headTemplate' cell-template-scope='col.headTemplateScope'></div>" +
@@ -122,9 +129,9 @@ angular.module('ng-bootstrap-grid', [])
             "       </thead>\n" +
             "       <tbody>\n" +
             "           <tr ng-repeat='item in options.data'>\n" +
-            "               <td ng-if='options.enableRowSelection' class='pagination-checkbox'><input type='checkbox' ng-model='item.selection' ng-click='selectRow(row)'></td>" +
+            "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'><input type='checkbox' ng-model='item.selection' class='childChk' ng-click='selectRow(row)'></td>" +
             "               <td ng-repeat='col in columns'>\n" +
-            "                   <div ng-if='col.cellTemplate' grid-compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +
+            "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +
             "                   <div ng-if='!col.cellTemplate' title='{{ item[col.field] }}'>{{ item[col.field] }}</div>\n" +
             "               </td>\n" +
             "           </tr>\n" +
@@ -141,23 +148,6 @@ angular.module('ng-bootstrap-grid', [])
             "</div>\n"
         }
     })
-    .directive('gridCompile', [
-        '$compile',
-        function ($compile) {
-            return {
-                restrict: 'A',
-                link: function (scope, element, attrs) {
-                    scope.cellTemplateScope = scope.$eval(attrs.cellTemplateScope);
-                    // Watch for changes to expression.
-                    scope.$watch(attrs.gridCompile, function (new_val) {
-                        var new_element = angular.element(new_val);
-                        element.append(new_element);
-                        $compile(new_element)(scope);
-                    });
-                }
-            };
-        }
-    ])
     .directive('pagedGridBar', function() {
         return {
             restrict: 'A',
@@ -186,19 +176,20 @@ angular.module('ng-bootstrap-grid', [])
                     } else {
                         scope.maxNum = parseInt(maxSize) + 1;
                     }
-                    console.log('scope.maxNum is ' + scope.maxNum)
+                    /*console.log('scope.maxNum is ' + scope.maxNum)*/
                     var numArray =[], itemArray = [], groupId= 0, itemId = 1, loopId = 1;
                     while(itemId <= scope.maxNum) {
                         itemArray.push(itemId++);
                         loopId++;
-                        if(loopId == 11) {
-                            groupId++;
-                            loopId = 1;
-                            numArray.push(itemArray);
-                            itemArray = [];
-                        }
                         if(itemId > scope.maxNum) {
                             numArray.push(itemArray);
+                        } else {
+                            if(loopId == 11) {
+                                groupId++;
+                                loopId = 1;
+                                numArray.push(itemArray);
+                                itemArray = [];
+                            }
                         }
                     }
                     scope.maxGroup = groupId;
@@ -254,14 +245,11 @@ angular.module('ng-bootstrap-grid', [])
                     }
                     scope.nextGroup = function() {
                         scope.currentGroup++;
-                        scope.paged(scope.currentGroup * scope.options.paginationPageSize + 1);
-                        console.log('Next page num is ' + scope.currentGroup);
+                        scope.paged(scope.currentGroup * 10 + 1);
                     }
                     scope.previousGroup = function() {
-                        /*scope.paged(scope.options.currentPage  - 1);*/
-                        scope.paged(scope.currentGroup * scope.options.paginationPageSize);
+                        scope.paged(scope.currentGroup * 10);
                         scope.currentGroup--;
-                        console.log('previous page num is ' + scope.currentGroup + " , maxGroup is" + scope.maxGroup);
                     }
                 };
             },

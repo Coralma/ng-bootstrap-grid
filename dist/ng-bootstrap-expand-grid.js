@@ -1,4 +1,4 @@
-angular.module('ng-bootstrap-expand-grid', [])
+angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
     .directive('expandGrid', [function() {
         return {
             restrict: 'E',
@@ -9,9 +9,11 @@ angular.module('ng-bootstrap-expand-grid', [])
                 onSelect: '='
             },
             link : function (scope, element, attrs) {
-                scope.columns = scope.options.columns;
+                scope.appScope = scope.$parent;
+                scope.columns = scope.options.columnDefs;
                 scope.maxColumnNum = scope.columns.length - 1;
                 scope.data = scope.options.data;
+                scope.selectAllFlag = false;
                 scope.$watch('options.data', function(data) {
                     var rows = [];
                     /*scope.rows = scope.options.data;*/
@@ -21,7 +23,7 @@ angular.module('ng-bootstrap-expand-grid', [])
                         rows.push(row);
                     });
                     scope.rows = rows;
-                    scope.columnNumber = scope.options.columns.length + 1; //FIXME it remove the hidden column and selection function.
+                    scope.columnNumber = scope.options.columnDefs.length + 1; //FIXME it remove the hidden column and selection function.
                     console.log(JSON.stringify(scope.rows, null, '\t'));
                 });
 
@@ -30,9 +32,18 @@ angular.module('ng-bootstrap-expand-grid', [])
                     _.forEach(scope.rows, function(row) {
                         row.item.selection = isSelectAll;
                     });
+                    scope.selectAllFlag = isSelectAll;
                 };
                 scope.selectRow = function(row) {
                     console.log('select a row.');
+                    if (scope.onSelect) {
+                        scope.onSelect(row);
+                    }
+                    //checkbox select all and un-select control.
+                    var uncheckedRow=_.find(scope.options.data,function(row){
+                        return row.selection==false || row.selection==null;
+                    });
+                    scope.selectAllFlag = (uncheckedRow==null);
                 }
                 scope.expandClick = function(clickedRow) {
                     if(scope.options.enableSingleExpand) {
@@ -51,11 +62,11 @@ angular.module('ng-bootstrap-expand-grid', [])
             },
             template:
             "<div class='table-responsive'>\n" +
-            "   <table class='table table-bordered' style='table-layout:fixed;'>\n" +
+            "   <table class='table table-bordered ep-grid' style='table-layout:fixed;'>\n" +
             "       <thead>\n" +
             "           <tr>\n" +
-            "               <th ng-if='options.enableRowSelection' style='width:30px'>" +
-            "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll'>" +
+            "               <th ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
+            "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll' ng-checked='selectAllFlag'>" +
             "               </th>" +
             "               <th ng-repeat='col in columns' style={{col.cellStyle}} >" +
             "                   <div ng-if='col.headTemplate' compile='col.headTemplate' cell-template-scope='col.headTemplateScope'></div>" +
@@ -65,7 +76,7 @@ angular.module('ng-bootstrap-expand-grid', [])
             "       </thead>\n" +
             "       <tbody ng-repeat='row in rows'>\n" +
             "           <tr ng-dblclick='row.expand=!row.expand'>\n" +
-            "               <td ng-if='options.enableRowSelection'><input type='checkbox' ng-model='row.item.selection' ng-click='selectRow(row)' ng-disabled='row.item.readonly'></td>" +
+            "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'><input type='checkbox' ng-model='row.item.selection' ng-click='selectRow(row)' ng-disabled='row.item.readonly'></td>" +
             "               <td ng-repeat='col in columns' style='word-break:break-all;'>\n" +
             "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +
             "                   <div ng-if='!col.cellTemplate' style='display:inline;float:left;'>{{ row.item[col.field] }}</div>\n" +
@@ -81,21 +92,4 @@ angular.module('ng-bootstrap-expand-grid', [])
             "   </table>\n" +
             "</div>\n"
         }
-    }])
-    .directive('compile', [
-        '$compile',
-        function ($compile) {
-            return {
-                restrict: 'A',
-                link    : function (scope, element, attrs) {
-                    scope.cellTemplateScope = scope.$eval(attrs.cellTemplateScope);
-                    // Watch for changes to expression.
-                    scope.$watch(attrs.compile, function (new_val) {
-                        var new_element = angular.element(new_val);
-                        element.append(new_element);
-                        $compile(new_element)(scope);
-                    });
-                }
-            };
-        }
-    ]);
+    }]);

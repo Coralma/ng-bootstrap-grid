@@ -1,6 +1,20 @@
+.grid-checkbox-cell {
+    width: 35px;
+    text-align: center;
+}
+
 .cate-radio-cell {
     width: 25px;
     text-align: center;
+}
+
+.panel-icon {
+    margin-left: 8px;
+}
+
+.category-title {
+    padding-left: 10px;
+    font-weight: bold;
 }
 .grid-field-cell {
     text-align: center;
@@ -42,7 +56,6 @@
 .data-count-desc {
     margin-left: 10px;
 }
-
 .bs-grid tr {
     height: 35px;
 }
@@ -61,7 +74,7 @@
 
 .table > tbody > tr > td {
     padding: 4px;
-    line-height: 1.5;
+    line-height: 1.2;
     vertical-align: middle;
 }
 .no-data {
@@ -71,6 +84,7 @@
 .bs-grid {
     margin-top: 5px;
 }
+
 .bs-grid td {
     padding: 4px !important;
     vertical-align: middle !important;
@@ -181,4 +195,15 @@
     border: 1px solid transparent;
     border-radius: 25px;
     cursor: pointer;
+}
+
+/* expand grid */
+.ep-grid td {
+    font-size: 12px;
+    line-height: 2.5 !important;
+}
+
+.ep-grid th {
+    font-size: 14px;
+    line-height: 2.5 !important;
 }

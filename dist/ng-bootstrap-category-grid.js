@@ -1,4 +1,4 @@
-angular.module('ng-bootstrap-category-grid', [])
+angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
     .directive('categoryGrid', function() {
         return {
             restrict: 'E',
@@ -12,6 +12,7 @@ angular.module('ng-bootstrap-category-grid', [])
                 scope.enableCategory = true;
                 scope.columns = scope.options.columnDefs;
                 /*scope.data = scope.options.data;*/
+                scope.selectAllFlag = false;
                 scope.appScope = scope.$parent;
                 scope.categoryData = function(data) {
                     if(!angular.isUndefined(scope.options.enableCategory)) {
@@ -41,7 +42,6 @@ angular.module('ng-bootstrap-category-grid', [])
                                 return item[categoryField] == uniqCategoryItem;
                             });
                             categoryRows.push(categoryRow);
-                            /*console.log(JSON.stringify(categoryRow.items));*/
                         }
                     } else {
                         var categoryRow = {};
@@ -52,7 +52,6 @@ angular.module('ng-bootstrap-category-grid', [])
                         categoryRows.push(categoryRow);
                     }
                     scope.rows = categoryRows;
-                    /*console.log(JSON.stringify(scope.rows, null, '\t'));*/
                 }
 
                 initColumn = function() {
@@ -89,7 +88,6 @@ angular.module('ng-bootstrap-category-grid', [])
                     return cf;
                 };
                 scope.selectAll = function(isSelectAll) {
-                    /*console.log(isSelectAll);*/
                     var rows = scope.rows;
                     for(var i=0; i < rows.length; i++) {
                         var row = rows[i];
@@ -99,11 +97,17 @@ angular.module('ng-bootstrap-category-grid', [])
                             item.selection = isSelectAll;
                         }
                     }
+                    scope.selectAllFlag = isSelectAll;
                 };
                 scope.selectRow = function(row) {
                     if(scope.onSelect) {
                         scope.onSelect(row);
                     }
+                    //checkbox select all and un-check operation.
+                    var uncheckedRow=_.find(scope.options.data,function(row){
+                        return row.selection==false || row.selection==null;
+                    });
+                    scope.selectAllFlag = (uncheckedRow==null);
                 }
                 scope.getSelectedRows = function() {
                     var selectedRows = [];
@@ -128,7 +132,6 @@ angular.module('ng-bootstrap-category-grid', [])
                     });
                 }
                 scope.onRightClick = function(item) {
-                    /*console.log('right click entity: '+ JSON.stringify(item, null, '\t'));*/
                     if(scope.rowRightClick) {
                         scope.rowRightClick(item);
                     }
@@ -139,8 +142,8 @@ angular.module('ng-bootstrap-category-grid', [])
             "   <table class='table table-bordered table-hover bs-grid' style='table-layout:fixed;'>" +
             "       <thead>" +
             "           <tr>" +
-            "               <th ng-if='options.enableRowSelection' class='cate-radio-cell'>" +
-            "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll'>" +
+            "               <th ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
+            "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll' ng-checked='selectAllFlag'>" +
             "               </th>" +
             "               <th ng-repeat='col in columns track by col.field' style={{col.cellStyle}} ng-if='col.visible'>" +
             "                   <div ng-if='col.headTemplate' compile='col.headTemplate' cell-template-scope='col.headTemplateScope'></div>" +
@@ -151,11 +154,11 @@ angular.module('ng-bootstrap-category-grid', [])
             "       <tbody ng-repeat='row in rows track by row.category'>" +
             "           <tr ng-click='row.initStatus=!row.initStatus' ng-if='enableCategory'>" +
             "               <td colspan='{{columnNumber}}'>" +
-            "               <i class='glyphicon panel-icon' ng-class='{\"glyphicon-chevron-down\": row.initStatus, \"glyphicon-chevron-right\": !row.initStatus}'></i><span style='padding-left: 10px'>{{row.category}}</span>" +
+            "                   <i class='glyphicon panel-icon' ng-class='{\"glyphicon-chevron-down\": row.initStatus, \"glyphicon-chevron-right\": !row.initStatus}'></i><span class='category-title'>{{row.category}}</span>" +
             "               </td>" +
             "           </tr>" +
             "           <tr ng-repeat='item in row.items track by $id(item)' ng-show='row.initStatus' context-menu='onRightClick(item)' data-target='rowMenu'>" +
-            "               <td ng-if='options.enableRowSelection' class='cate-radio-cell'>" +
+            "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
             "                   <input type='checkbox' ng-model='item.selection' ng-click='selectRow(row)'>" +
             "               </td>" +
             "               <td ng-repeat='col in columns track by col.field' style='word-break:break-all;' ng-if='col.visible' title='{{ item[col.field] }}'>" +
@@ -167,22 +170,4 @@ angular.module('ng-bootstrap-category-grid', [])
             "   </table>" +
             "</div>"
         }
-    })
-    .directive('compile', [
-        '$compile',
-        function ($compile) {
-            return {
-                /*require: '^form',*/
-                restrict: 'A',
-                link    : function (scope, element, attrs) {
-                    scope.cellTemplateScope = scope.$eval(attrs.cellTemplateScope);
-                    // Watch for changes to expression.
-                    scope.$watch(attrs.compile, function (new_val) {
-                        var new_element = angular.element(new_val);
-                        element.append(new_element);
-                        $compile(new_element)(scope);
-                    });
-                }
-            };
-        }
-    ]);
+    });
