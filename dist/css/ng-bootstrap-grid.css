@@ -65,11 +65,12 @@
     vertical-align: middle;
     border-bottom: 1px solid #dddddd;
     padding: 4px;
-    background-image: -webkit-linear-gradient(#ffffff, #f5f5f5 60%, #f1f1f1);
+    background-color: #fff;
+    /*background-image: -webkit-linear-gradient(#ffffff, #f5f5f5 60%, #f1f1f1);
     background-image: -o-linear-gradient(#ffffff, #f5f5f5 60%, #f1f1f1);
     background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), color-stop(60%, #f5f5f5), to(#f1f1f1));
     background-image: linear-gradient(#ffffff, #f5f5f5 60%, #f1f1f1);
-    background-repeat: no-repeat;
+    background-repeat: no-repeat;*/
     -webkit-user-select: none; /* Chrome/Safari */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+ */
@@ -82,6 +83,7 @@
     -webkit-user-select: none; /* Chrome/Safari */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+ */
+    word-break:break-all;
 }
 .no-data {
     height: 50px;
@@ -212,4 +214,8 @@
 .ep-grid th {
     font-size: 12px;
     line-height: 1 !important;
+}
+
+.row-highlight {
+    background-color: yellow !important;
 }

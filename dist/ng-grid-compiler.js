@@ -17,3 +17,8 @@ angular.module('ng-bootstrap-compile', [])
             };
         }
     ])
+    .filter('decimalFilter', ['$filter', function($filter) {
+        return function(input){
+            return $filter('number')(input, 2);
+        }
+    }]);

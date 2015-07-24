@@ -1,18 +1,28 @@
 <!doctype html>
 <html ng-app="myApp">
 <head>
+    <script src="../lib/jquery/dist/jquery.js"></script>
     <script src="../lib/angular/angular.js"></script>
     <script src="../lib/lodash/lodash.js"></script>
+    <script src="../lib/fixedheadertable/jquery.fixedheadertable.js"></script>
+
     <script src="../dist/ng-bootstrap-grid.js"></script>
     <script src="../dist/ng-bootstrap-category-grid.js"></script>
     <script src="../dist/ng-bootstrap-expand-grid.js"></script>
     <script src="../dist/ng-grid-compiler.js"></script>
 
     <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../lib/fixedheadertable/defaultTheme.css">
     <link rel="stylesheet" href="../dist/css/ng-bootstrap-grid.css">
     <style>
         body {
             font-size: 12px;
+        }
+        .otherFeeBorderRight {
+            border-right:none !important;
+        }
+        .center-data {
+            text-align: center;
         }
         /*.paged-grid-num-link:hover {
             border: 1px solid #ccc;
@@ -34,8 +44,12 @@
 <script type="text/javascript">
     var myApp = angular.module('myApp', ['ng-bootstrap-grid']);
 
-    myApp.controller('MyController', ['$scope', function($scope) {
+    myApp.controller('MyController', ['$scope','$filter', function($scope, $filter) {
+        console.log($filter('decimalFilter')(123));
         $scope.gridOptions = {
+            gridId : 'testGrid',
+            enableOverflow : true,
+            overflowHeight : '300px',
             paginationPageSizes: [5, 10, 15],
             paginationPageSize: 5,
             useExternalPagination: true,
@@ -47,21 +61,21 @@
             },
             columnDefs : [
                 {displayName: 'FirstName', field:'firstName',enableSorting: true},
-                {displayName: 'LastName', field:'lastName',cellStyle: "width:200px",cellTemplate: "<a href=''>{{ item[col.field] }}</a>"},
-                {displayName: 'Company', field:'company',cellStyle: "width:200px", cellTemplate : "<div class='ui-grid-cell-contents'><a ng-href='javascript:void(0)' ng-click='appScope.openClaim(grid, row)'>{{item[col.field]}}</a></div>"},
+                {displayName: 'LastName', field:'lastName',cellStyle: "width:200px",cellClass: 'center-data'},
+                {displayName: 'Company', field:'company',cellStyle: "width:200px", filter: 'decimalFilter'},
                 {displayName: 'Employed', field:'employed',cellStyle: "width:200px",enableSorting: false, visible: false }
             ],
             data : [
-                {"firstName": "Cox","lastName": "Carney","company": "Enormo","employed": true},
-                {"firstName": "Lorraine","lastName": "Wise","company": "Comveyer","employed": false},
-                {"firstName": "Nancy","lastName": "Eric","company": "Enormo","employed": false},
-                {"firstName": "Lora","lastName": "Karl","company": "Comveyer","employed": true},
-                {"firstName": "Angel","lastName": "Pete","company": "Enormo","employed": false},
-                {"firstName": "Babala","lastName": "Mildred","company": "Comveyer","employed": true},
-                {"firstName": "Wind","lastName": "Owen","company": "Comveyer","employed": true},
-                {"firstName": "Iris","lastName": "Lee","company": "Comveyer","employed": true},
-                {"firstName": "Rocky","lastName": "Alax","company": "Enormo","employed": false},
-                {"firstName": "Muse","lastName": "Dick","company": "Enormo","employed": false}
+                {"firstName": "Cox","lastName": "Carney","company": "22","employed": true},
+                {"firstName": "Lorraine","lastName": "Wise","company": "345","employed": false},
+                {"firstName": "Nancy","lastName": "Eric","company": "23","employed": false},
+                {"firstName": "Lora","lastName": "Karl","company": "23","employed": true},
+                {"firstName": "Angel","lastName": "Pete","company": "56","employed": false},
+                {"firstName": "Babala","lastName": "Mildred","company": "32","employed": true},
+                {"firstName": "Wind","lastName": "Owen","company": "345","employed": true},
+                {"firstName": "Iris","lastName": "Lee","company": "56","employed": true},
+                {"firstName": "Rocky","lastName": "Alax","company": "435","employed": false},
+                {"firstName": "Muse","lastName": "Dick","company": "354","employed": false}
             ]
         }
         $scope.gridOptions.totalItems = 0;
@@ -69,6 +83,7 @@
         $scope.submitData = function() {
             $scope.resultData = $scope.gridOptions.data;
             console.log(JSON.stringify($scope.gridOptions.data, null, '\t'));
+            $('#bsGrid').fixedHeaderTable({ height: '300', altClass: 'odd', themeClass: 'fancyDarkTable', footer: true});
         }
 
         $scope.rowSelect = function(row) {
@@ -88,7 +103,7 @@
             console.log('The pageIndex is ' + pageIndex + ', pageSize is ' + pageSize + ", sortField is " + sortField + ", sortType is " + sortType);
         }
 
-    }]);
+    }])
 </script>
 </body>
 </html>

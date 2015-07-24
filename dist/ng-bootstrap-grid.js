@@ -1,5 +1,5 @@
 angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
-    .directive('bsGrid', function () {
+    .directive('bsGrid', ['$timeout','$filter', function ($timeout, $filter) {
         return {
             restrict: 'E',
             replace: true,
@@ -11,6 +11,7 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
             },
             link: function (scope, element, attrs) {
                 scope.appScope = scope.$parent;
+                scope.$filter = $filter;
                 scope.dataBackup = angular.copy(scope.options.data);
                 scope.options.useExternalPagination = scope.options.useExternalPagination || false;
                 scope.options.noDataMessage =  scope.options.noDataMessage || '没有找到匹配数据';
@@ -109,9 +110,16 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
                         }
                     });
                 }
+
+                if(scope.options.enableOverflow) {
+                    $timeout(function(){
+                        var id = '#' + scope.options.gridId;
+                        $(id).fixedHeaderTable({ height: scope.options.overflowHeight, altClass: 'odd', footer: true});
+                    },0);
+                }
             },
-            template: "<div class='table-responsive'>\n" +
-            "   <table class='table table-bordered table-hover table-striped'>\n" +
+            template:
+            "   <table class='table table-bordered table-hover table-striped' id='{{options.gridId}}'>\n" +
             "       <thead>\n" +
             "           <tr>\n" +
             "               <th ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
@@ -128,26 +136,27 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
             "           </tr>\n" +
             "       </thead>\n" +
             "       <tbody>\n" +
-            "           <tr ng-repeat='item in options.data'>\n" +
+            "           <tr ng-repeat='item in options.data' class='row-highlight'>\n" +
             "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'><input type='checkbox' ng-model='item.selection' class='childChk' ng-click='selectRow(row)'></td>" +
-            "               <td ng-repeat='col in columns'>\n" +
+            "               <td ng-repeat='col in columns' ng-class='col.cellClass'>\n" +
             "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +
-            "                   <div ng-if='!col.cellTemplate' title='{{ item[col.field] }}'>{{ item[col.field] }}</div>\n" +
+            "                   <div ng-if='!col.cellTemplate' title='{{ item[col.field] }}'>{{ col.filter ? $filter(col.filter)(item[col.field]) : item[col.field] }}</div>\n" +
             "               </td>\n" +
             "           </tr>\n" +
             "           <tr ng-if='options.data == null || options.data.length == 0'>" +
             "               <td colspan='{{columnNumber}}' class='no-data'>{{options.noDataMessage}}</td>" +
             "           </tr>" +
+            "       </tbody>\n" +
+            "       <tfoot>" +
             "           <tr ng-if='options.useExternalPagination'>" +
             "               <td colspan='{{columnNumber}}'>" +
             "                   <div paged-grid-bar></div>" +
             "               </td>" +
             "           </tr>" +
-            "       </tbody>\n" +
-            "   </table>\n" +
-            "</div>\n"
+            "       </tfoot>" +
+            "   </table>\n"
         }
-    })
+    }])
     .directive('pagedGridBar', function() {
         return {
             restrict: 'A',

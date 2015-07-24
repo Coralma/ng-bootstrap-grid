@@ -7,7 +7,7 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
             scope: {
                 options: '=',
                 onSelect: '=',
-                onExpand: '=',
+                onExpand: '='
             },
             link : function (scope, element, attrs) {
                 scope.appScope = scope.$parent;
@@ -78,6 +78,11 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
                             scope.initData();
                         },
                         addNewItem :  function(data) {
+                            /*scope.initData();
+                             var newRow = _.filter(scope.rows, {'item' : data});
+                             newRow.expand= true;
+                             scope.expandClick(newRow[0]);
+                             scope.initData();*/
                             var newRow = {item : data, expand: true, expandTemplate: scope.options.expandableRowTemplate};
                             scope.rows.push(newRow);
                             scope.expandClick(newRow);
@@ -87,13 +92,12 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
                         },
                         deleteSelectedRows : function() {
                             var selectedRows = scope.getSelectedRows();
-                            _.remove(scope.options.data, function(data) {
-                                var existedData = _.filter(selectedRows, {'item' : data});
-                                if(existedData.length > 0) {
-                                    _.remove(scope.rows, {'item' : data});
-                                    return true;
+                            _.remove(scope.rows, function(data) {
+                                var checkResult = _.includes(selectedRows, data);
+                                if(checkResult) {
+                                    _.remove(scope.options.data, data.item);
                                 }
-                                return false;
+                                return checkResult;
                             });
                         }
                     });
