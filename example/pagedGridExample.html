@@ -24,6 +24,9 @@
         .center-data {
             text-align: center;
         }
+        .right-number {
+            text-align: right;
+        }
         /*.paged-grid-num-link:hover {
             border: 1px solid #ccc;
             text-decoration: none;
@@ -38,7 +41,7 @@
         <!--<pagination-grid options="gridOptions" on-select="rowSelect"></pagination-grid>-->
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
         <button class="btn btn-default" ng-click="selectedRows()" type="button">Get Selected Rows</button>
-        <p>{{resultData}}</p>
+        <p>{{gridOptions.data}}</p>
     </div>
 </form>
 <script type="text/javascript">
@@ -55,6 +58,10 @@
             useExternalPagination: true,
             enableRowSelection: true,
             enableGridMenu: false,
+            currentMessage: 'Display (',
+            separateMessage: '), Total : ',
+            unitMessage: ' ',
+            displayNumMessage: 'Display Number',
             noDataMessage: '没有找到匹配的结果',
             onRegisterApi : function(gridApi){
                 $scope.gridApi = gridApi;
@@ -62,23 +69,24 @@
             columnDefs : [
                 {displayName: 'FirstName', field:'firstName',enableSorting: true},
                 {displayName: 'LastName', field:'lastName',cellStyle: "width:200px",cellClass: 'center-data'},
-                {displayName: 'Company', field:'company',cellStyle: "width:200px", filter: 'decimalFilter'},
-                {displayName: 'Employed', field:'employed',cellStyle: "width:200px",enableSorting: false, visible: false }
+                {displayName: 'Company', field:'company',cellStyle: "width:200px"},
+                {displayName: 'Income', field:'income',cellStyle: "width:200px", filter: 'decimalFilter', cellClass: 'right-number'},
+                {displayName: 'Employed', field:'employed',cellStyle: "width:150px", cellTemplate:'<input type="checkbox" ng-model="item[col.field]">'}
             ],
             data : [
-                {"firstName": "Cox","lastName": "Carney","company": "22","employed": true},
-                {"firstName": "Lorraine","lastName": "Wise","company": "345","employed": false},
-                {"firstName": "Nancy","lastName": "Eric","company": "23","employed": false},
-                {"firstName": "Lora","lastName": "Karl","company": "23","employed": true},
-                {"firstName": "Angel","lastName": "Pete","company": "56","employed": false},
-                {"firstName": "Babala","lastName": "Mildred","company": "32","employed": true},
-                {"firstName": "Wind","lastName": "Owen","company": "345","employed": true},
-                {"firstName": "Iris","lastName": "Lee","company": "56","employed": true},
-                {"firstName": "Rocky","lastName": "Alax","company": "435","employed": false},
-                {"firstName": "Muse","lastName": "Dick","company": "354","employed": false}
+                {"firstName": "Cox","lastName": "Carney","company": "IBM","income": 32900,"employed": true},
+                {"firstName": "Lorraine","lastName": "Wise","company": "Google","income": 58000,"employed": false},
+                {"firstName": "Nancy","lastName": "Eric","company": "IBM","income": 46000,"employed": false},
+                {"firstName": "Lora","lastName": "Karl","company": "IBM","income": 20000,"employed": true},
+                {"firstName": "Angel","lastName": "Pete","company": "Google","income": 32000,"employed": false},
+                {"firstName": "Babala","lastName": "Mildred","company": "IBM","income": 11000,"employed": true},
+                {"firstName": "Wind","lastName": "Owen","company": "Facebook","income": 25000,"employed": true},
+                {"firstName": "Iris","lastName": "Lee","company": "Facebook","income": 22000,"employed": true},
+                {"firstName": "Rocky","lastName": "Alax","company": "Github","income": 16000,"employed": false},
+                {"firstName": "Muse","lastName": "Dick","company": "Github","income": 14500,"employed": false}
             ]
         }
-        $scope.gridOptions.totalItems = 0;
+        $scope.gridOptions.totalItems = 201;
 
         $scope.submitData = function() {
             $scope.resultData = $scope.gridOptions.data;

@@ -15,6 +15,11 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
                 scope.dataBackup = angular.copy(scope.options.data);
                 scope.options.useExternalPagination = scope.options.useExternalPagination || false;
                 scope.options.noDataMessage =  scope.options.noDataMessage || '没有找到匹配数据';
+                scope.options.displayNumMessage =  scope.options.displayNumMessage || '每页显示';
+                scope.options.currentMessage =  scope.options.currentMessage || '当前';
+                scope.options.separateMessage =  scope.options.separateMessage || '条，总共';
+                scope.options.unitMessage = scope.options.unitMessage  || '条';
+
                 scope.columns = scope.options.columnDefs;
                 scope.selectAllFlag = false;
                 _.remove(scope.columns, {'visible':false});
@@ -111,12 +116,12 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
                     });
                 }
 
-                if(scope.options.enableOverflow) {
+                /*if(scope.options.enableOverflow) {
                     $timeout(function(){
                         var id = '#' + scope.options.gridId;
                         $(id).fixedHeaderTable({ height: scope.options.overflowHeight, altClass: 'odd', footer: true});
                     },0);
-                }
+                }*/
             },
             template:
             "   <table class='table table-bordered table-hover table-striped' id='{{options.gridId}}'>\n" +
@@ -136,7 +141,7 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
             "           </tr>\n" +
             "       </thead>\n" +
             "       <tbody>\n" +
-            "           <tr ng-repeat='item in options.data' class='row-highlight'>\n" +
+            "           <tr ng-repeat='item in options.data'>\n" +
             "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'><input type='checkbox' ng-model='item.selection' class='childChk' ng-click='selectRow(row)'></td>" +
             "               <td ng-repeat='col in columns' ng-class='col.cellClass'>\n" +
             "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +
@@ -271,9 +276,9 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
             '   <a href="javascript:void(0)" class="paged-grid-num-link paged-grid-link" ng-if="currentGroup < maxGroup" ng-click="nextGroup()">...</a>' +
             '   <a href="javascript:void(0)" class="glyphicon glyphicon-triangle-right paged-grid-ctrl-link3 paged-grid-link" ng-click="next()" ng-class="(options.currentPage == maxNum || maxNum == 0)?\'not-active\':\'\'"></a>' +
             '   <a href="javascript:void(0)" class="glyphicon glyphicon-step-forward paged-grid-ctrl-link paged-grid-link" ng-click="last()" ng-class="(options.currentPage==maxNum || maxNum == 0)?\'not-active\':\'\'"></a>' +
-            '   <span class="data-count-desc">当前 {{itemNumberStart()}} - {{itemNumberEnd()}} 条，总共 {{options.totalItems}} 条</span>' +
+            '   <span class="data-count-desc">{{options.currentMessage}} {{itemNumberStart()}} - {{itemNumberEnd()}} {{options.separateMessage}} {{options.totalItems}} {{options.unitMessage}}</span>' +
             '    <div class="pull-right paged-display-list">' +
-            '   <span>每页显示</span>' +
+            '   <span>{{options.displayNumMessage}}</span>' +
             '        <select ng-model="options.paginationPageSize" ng-options="di for di in options.paginationPageSizes"></select>' +
             '    </div>' +
             '</div>'
