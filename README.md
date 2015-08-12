@@ -3,6 +3,9 @@ This project provide a Grid (Table) controller for angularJs. The style will use
 
 ###Screenshot
 ![image](https://github.com/Coralma/ng-bootstrap-grid/blob/master/example/screenshot/category.jpg)
+![image](https://github.com/Coralma/ng-bootstrap-grid/blob/master/example/screenshot/expandGrid.jpg)
+![image](https://github.com/Coralma/ng-bootstrap-grid/blob/master/example/screenshot/paginationGrid.jpg)
+
 
 ###Installation
 Installation is easy as ng-bootstrap-grid has minimal dependencies - only the AngularJS, Twitter Bootstrap's CSS and lodash are required.
