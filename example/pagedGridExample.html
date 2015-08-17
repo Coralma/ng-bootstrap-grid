@@ -9,7 +9,7 @@
     <script src="../dist/ng-bootstrap-grid.js"></script>
     <script src="../dist/ng-bootstrap-category-grid.js"></script>
     <script src="../dist/ng-bootstrap-expand-grid.js"></script>
-    <script src="../dist/ng-grid-compiler.js"></script>
+    <script src="../dist/ng-grid-utils.js"></script>
 
     <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="../lib/fixedheadertable/defaultTheme.css">
@@ -52,7 +52,7 @@
         $scope.gridOptions = {
             gridId : 'testGrid',
             enableOverflow : true,
-            overflowHeight : '300px',
+            fixedHeight: '300px',
             paginationPageSizes: [5, 10, 15],
             paginationPageSize: 5,
             useExternalPagination: true,

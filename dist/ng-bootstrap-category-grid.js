@@ -1,5 +1,52 @@
-angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
-    .directive('categoryGrid', function() {
+angular.module('ng-bootstrap-category-grid', ['ng-grid-utils'])
+    .directive('categoryGrid', ['$timeout', '$window', '$templateCache', 'gridService', function ($timeout, $window, $templateCache, gridService) {
+        var TEMPLATE_FIXED_HEIGHT = 'template/categoryGrid/categoryGridFixedHeight.html';
+
+        var GRID_CATEGORY_PART_HEAD =
+            "       <thead>" +
+            "           <tr>" +
+            "               <th ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
+            "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll' ng-checked='selectAllFlag'>" +
+            "               </th>" +
+            "               <th ng-repeat='col in columns track by col.field' style={{col.headStyle}} ng-if='col.visible'>" +
+            "                   <div ng-if='col.headTemplate' compile='col.headTemplate' cell-template-scope='col.headTemplateScope'></div>" +
+            "                   <div ng-if='!col.headTemplate' >{{col.headTemplate || col.displayName || col.field}}</div>" +
+            "               </th>" +
+            "           </tr>" +
+            "       </thead>";
+
+        var GRID_CATEGORY_PART_BODY =
+            "       <tbody ng-repeat='row in rows track by row.category'>" +
+            "           <tr ng-click='row.initStatus=!row.initStatus' ng-if='enableCategory'>" +
+            "               <td colspan='{{columnNumber}}'>" +
+            "                   <i class='glyphicon panel-icon' ng-class='{\"glyphicon-chevron-down\": row.initStatus, \"glyphicon-chevron-right\": !row.initStatus}'></i><span class='category-title'>{{row.category}}</span>" +
+            "               </td>" +
+            "           </tr>" +
+            "           <tr ng-repeat='item in row.items track by $id(item)' ng-class='item.rowHighlight ? \"row-highlight\" : \"\"' ng-show='row.initStatus' context-menu='onRightClick(item)' data-target='rowMenu'>" +
+            "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
+            "                   <input type='checkbox' ng-model='item.selection' ng-click='selectRow(row)'>" +
+            "               </td>" +
+            "               <td ng-repeat='col in columns track by col.field' style={{col.cellStyle}} style='word-break:break-all;' ng-if='col.visible'>" +
+            "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>" +
+            "                   <div ng-if='!col.cellTemplate'>{{ item[col.field] }}</div>" +
+            "               </td>" +
+            "           </tr>" +
+            "       </tbody>";
+
+        var GRID_CATEGORY_STRUCTURE_FIXED_HEIGHT =
+            "<div class='table-responsive table-bordered bs-grid'>" +
+            "   <table class='table table-head table-bordered table-hover' style='table-layout:fixed;margin-bottom:0px; width:auto;'>" +
+            GRID_CATEGORY_PART_HEAD +
+            "   </table>\n" +
+            "   <div style='overflow-y:auto;'>\n" +
+            "   <table class='table table-body table-bordered table-hover' style='table-layout:fixed;margin-bottom:0px;'>" +
+            GRID_CATEGORY_PART_HEAD +
+            GRID_CATEGORY_PART_BODY +
+            "   </table>" +
+            "</div>"
+
+        $templateCache.put(TEMPLATE_FIXED_HEIGHT, GRID_CATEGORY_STRUCTURE_FIXED_HEIGHT);
+
         return {
             restrict: 'E',
             replace: true,
@@ -8,23 +55,26 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
                 onSelect: '=',
                 rowRightClick: '='
             },
-            link : function (scope, element, attrs) {
+            link: function (scope, element, attrs) {
                 scope.enableCategory = true;
                 scope.columns = scope.options.columnDefs;
                 /*scope.data = scope.options.data;*/
                 scope.selectAllFlag = false;
                 scope.appScope = scope.$parent;
-                scope.categoryData = function(data) {
-                    if(!angular.isUndefined(scope.options.enableCategory)) {
+
+                scope.categoryData = function (data) {
+                    scope.selectAllFlag = false;
+                    if (!angular.isUndefined(scope.options.enableCategory)) {
                         scope.enableCategory = scope.options.enableCategory;
                     } else {
                         scope.enableCategory = true;
                     }
-                    var categoryRows = [],item = data[0], categorys=[], len = data.length, i = 0;
+                    var categoryRows = [], item = data[0], categorys = [], len = data.length, i = 0;
                     var categoryField = getCategoryField(scope.options.columnDefs);
                     initColumn();
                     data = sortData(data);
-                    if(scope.enableCategory) {
+
+                    if (scope.enableCategory) {
                         while (i < len) {
                             item = data[i++];
                             var value = item[categoryField];
@@ -54,66 +104,66 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
                     scope.rows = categoryRows;
                 }
 
-                initColumn = function() {
+                initColumn = function () {
                     var index = 0;
                     // set the visible column
-                    _.forEach(scope.columns, function(col) {
-                        if(angular.isUndefined(col.visible)) {
+                    _.forEach(scope.columns, function (col) {
+                        if (angular.isUndefined(col.visible)) {
                             col.visible = true;
                             index++;
-                        } else if(col.visible){
+                        } else if (col.visible) {
                             index++;
                         }
                     });
-                    if(scope.options.enableRowSelection) {
+                    if (scope.options.enableRowSelection) {
                         scope.columnNumber = index + 1;
                     } else {
                         scope.columnNumber = index;
                     }
                 };
-                sortData = function(data) {
-                    var sortList = _.filter(scope.columns, function(col) {
+                sortData = function (data) {
+                    var sortList = _.filter(scope.columns, function (col) {
                         return col['enableSorting'] == true;
                     });
-                    _.forEach(sortList, function(sortDef) {
+                    _.forEach(sortList, function (sortDef) {
                         data = _.sortByOrder(data, [sortDef.field], ['asc'])
                     })
                     return data;
                 }
 
-                getCategoryField = function(cols) {
-                    var cf = _.result(_.find(cols, function(chr) {
+                getCategoryField = function (cols) {
+                    var cf = _.result(_.find(cols, function (chr) {
                         return chr.category == true;
                     }), 'field');
                     return cf;
                 };
-                scope.selectAll = function(isSelectAll) {
+                scope.selectAll = function (isSelectAll) {
                     var rows = scope.rows;
-                    for(var i=0; i < rows.length; i++) {
+                    for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
                         var items = row.items;
-                        for(var j=0; j < items.length; j++) {
+                        for (var j = 0; j < items.length; j++) {
                             var item = items[j];
                             item.selection = isSelectAll;
                         }
                     }
                     scope.selectAllFlag = isSelectAll;
                 };
-                scope.selectRow = function(row) {
-                    if(scope.onSelect) {
+                scope.selectRow = function (row) {
+                    if (scope.onSelect) {
                         scope.onSelect(row);
                     }
                     //checkbox select all and un-check operation.
-                    var uncheckedRow=_.find(scope.options.data,function(row){
-                        return row.selection==false || row.selection==null;
+                    var uncheckedRow = _.find(scope.options.data, function (row) {
+                        return row.selection == false || row.selection == null;
                     });
-                    scope.selectAllFlag = (uncheckedRow==null);
+                    scope.selectAllFlag = (uncheckedRow == null);
                 }
-                scope.getSelectedRows = function() {
+                scope.getSelectedRows = function () {
                     var selectedRows = [];
-                    _.forEach(scope.rows, function(row) {
-                        _.forEach(row.items, function(item) {
-                            if(item.selection) {
+                    _.forEach(scope.rows, function (row) {
+                        _.forEach(row.items, function (item) {
+                            if (item.selection) {
                                 selectedRows.push(item);
                             }
                         })
@@ -123,51 +173,70 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
                 // init category
                 scope.categoryData(scope.options.data);
                 // init explore api
-                if(scope.options.onRegisterApi) {
+                if (scope.options.onRegisterApi) {
                     scope.options.onRegisterApi({
-                        refresh :  function() {scope.categoryData(scope.options.data)},
-                        getSelectedRows : function() {
+                        getSelectedRows: function () {
                             return scope.getSelectedRows();
+                        },
+                        refresh: function () {
+                            scope.categoryData(scope.options.data)
+
+                                $timeout(function () {
+                                    if (scope.options.fixedHeight) {
+                                        scope.calcGridSize(scope.options.fixedHeight);
+                                    } else {
+                                        scope.calcGridSize();
+                                    }
+                                }, 0);
+                        },
+                        calcGridSize: function (gridHeight) {
+                            //windowHeight为空，则用window高度计算
+                            scope.calcGridSize(gridHeight);
                         }
                     });
                 }
-                scope.onRightClick = function(item) {
-                    if(scope.rowRightClick) {
+                scope.onRightClick = function (item) {
+                    if (scope.rowRightClick) {
                         scope.rowRightClick(item);
                     }
                 }
+                scope.calcGridSize = function (gridHeight) {
+                    $timeout(function () {
+                        var gridHolderElement = element.parent().children('div');
+                        if (gridHeight) {
+                            scope.options.fixedHeight = gridHeight;
+                            gridService.calcGridSize(gridHolderElement, gridHeight);
+                        } else {
+                            gridService.calcGridSize(gridHolderElement, scope.options.fixedHeight);
+                        }
+                    }, 0);
+                };
+
+                scope.getTemplate = function () {
+                    return TEMPLATE_FIXED_HEIGHT;
+                }
+
+                //FixedGrid,需要计算GridSize，并监听resize事件
+                    scope.calcGridSize();
+
+                    $(window).resize(function (e) {
+                        if (e.target != window) {
+                            //避免jQueryUI dialog的resize
+                            return;
+                        }
+
+                        if (!scope.calcGridSize) {
+                            return;
+                        }
+
+                        if (scope.options.fixedHeight) {
+                            scope.calcGridSize(scope.options.fixedHeight);
+                        } else {
+                            scope.calcGridSize();
+                        }
+                    });
+
             },
-            template:
-            "<div class='table-responsive'>" +
-            "   <table class='table table-bordered table-hover bs-grid' style='table-layout:fixed;'>" +
-            "       <thead>" +
-            "           <tr>" +
-            "               <th ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
-            "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll' ng-checked='selectAllFlag'>" +
-            "               </th>" +
-            "               <th ng-repeat='col in columns track by col.field' style={{col.cellStyle}} ng-if='col.visible'>" +
-            "                   <div ng-if='col.headTemplate' compile='col.headTemplate' cell-template-scope='col.headTemplateScope'></div>" +
-            "                   <div ng-if='!col.headTemplate' >{{col.headTemplate || col.displayName || col.field}}</div>" +
-            "               </th>" +
-            "           </tr>" +
-            "       </thead>" +
-            "       <tbody ng-repeat='row in rows track by row.category'>" +
-            "           <tr ng-click='row.initStatus=!row.initStatus' ng-if='enableCategory'>" +
-            "               <td colspan='{{columnNumber}}'>" +
-            "                   <i class='glyphicon panel-icon' ng-class='{\"glyphicon-chevron-down\": row.initStatus, \"glyphicon-chevron-right\": !row.initStatus}'></i><span class='category-title'>{{row.category}}</span>" +
-            "               </td>" +
-            "           </tr>" +
-            "           <tr ng-repeat='item in row.items track by $id(item)' ng-show='row.initStatus' context-menu='onRightClick(item)' data-target='rowMenu'>" +
-            "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
-            "                   <input type='checkbox' ng-model='item.selection' ng-click='selectRow(row)'>" +
-            "               </td>" +
-            "               <td ng-repeat='col in columns track by col.field' style='word-break:break-all;' ng-if='col.visible' title='{{ item[col.field] }}'>" +
-            "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>" +
-            "                   <div ng-if='!col.cellTemplate'>{{ item[col.field] }}</div>" +
-            "               </td>" +
-            "           </tr>" +
-            "       </tbody>" +
-            "   </table>" +
-            "</div>"
+            template: "<div ng-include='getTemplate()'></div>"
         }
-    });
+    }]);

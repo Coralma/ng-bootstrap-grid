@@ -8,7 +8,7 @@
     <script src="../lib/ng-context-menu/dist/ng-context-menu.js"></script>
     <script src="../dist/ng-bootstrap-category-grid.js"></script>
     <script src="../dist/ng-bootstrap-expand-grid.js"></script>
-    <script src="../dist/ng-grid-compiler.js"></script>
+    <script src="../dist/ng-grid-utils.js"></script>
     <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="../dist/css/ng-bootstrap-grid.css">
 
@@ -23,7 +23,9 @@
 <form name="form">
     <div class="container-fluid" ng-controller="MyController">
         <h3>Category Grid</h3>
-        <category-grid options="gridOptions" on-select="rowSelect" row-right-click="rightClickEvent"></category-grid>
+        <div>
+            <category-grid options="gridOptions" on-select="rowSelect" row-right-click="rightClickEvent"></category-grid>
+        </div>
         <button class="btn btn-default" ng-click="add()" type="button">Add</button>
         <button class="btn btn-default" ng-click="delete()" type="button">Delete</button>
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
@@ -76,6 +78,9 @@
 
         $scope.gridOptions = {
             enableRowSelection: true,
+
+            enableCellEditOnFocus: true,
+            treeRowHeaderAlwaysVisible: false,
             enableCategory:true,
             columnDefs : [
                 {displayName: 'IndexOrder', field:'indexOrder', enableSorting: true},
