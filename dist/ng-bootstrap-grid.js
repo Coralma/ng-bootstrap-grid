@@ -152,7 +152,7 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
             "               <td colspan='{{columnNumber}}' class='no-data'>{{options.noDataMessage}}</td>" +
             "           </tr>" +
             "       </tbody>\n" +
-            "       <tfoot>" +
+            "       <tfoot class='bs-foot'>" +
             "           <tr ng-if='options.useExternalPagination'>" +
             "               <td colspan='{{columnNumber}}'>" +
             "                   <div paged-grid-bar></div>" +
