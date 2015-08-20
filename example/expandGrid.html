@@ -35,6 +35,7 @@
 
     myApp.controller('MyController', ['$scope', function($scope) {
         $scope.gridOptions = {
+            enableExpand: false,
             enableRowSelection: true,
             enableSingleExpand: true,
             expandableRowTemplate: 'expandForm.html',

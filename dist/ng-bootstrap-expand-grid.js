@@ -15,7 +15,9 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
                 scope.maxColumnNum = scope.columns.length - 1;
                 /*scope.data = scope.options.data;*/
                 scope.selectAllFlag = false;
-                /*scope.$watch('options.data', function(data) {*/
+                if(angular.isUndefined(scope.options.enableExpand)) {
+                    scope.options.enableExpand = true;
+                }
                 scope.initData = function() {
                     var rows = [];
                     /*scope.rows = scope.options.data;*/
@@ -49,15 +51,19 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
                     scope.selectAllFlag = (uncheckedRow==null);
                 }
                 scope.expandClick = function(clickedRow) {
-                    if(scope.options.enableSingleExpand) {
-                        _.forEach(scope.rows, function(row) {
-                            if(row != clickedRow) {
-                                row.expand = false;
-                                /*row.item.readonly = true;*/
-                            }
-                        });
+                    if(scope.options.enableExpand) {
+                        if(scope.options.enableSingleExpand) {
+                            _.forEach(scope.rows, function(row) {
+                                if(row != clickedRow) {
+                                    row.expand = false;
+                                    /*row.item.readonly = true;*/
+                                }
+                            });
+                        }
+                        if(scope.onExpand) {
+                            scope.onExpand(clickedRow);
+                        }
                     }
-                    scope.onExpand(clickedRow);
                 }
                 scope.getSelectedRows = function() {
                     var selectedRows = [];
@@ -123,10 +129,10 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
             "               <td ng-repeat='col in columns' style='word-break:break-all;'>\n" +
             "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +
             "                   <div ng-if='!col.cellTemplate' style='display:inline;float:left;'>{{ row.item[col.field] }}</div>\n" +
-            "                   <div ng-if='$index == maxColumnNum' class='pull-right' style='display:inline;float:left;'><i class='glyphicon' ng-click='row.expand=!row.expand;expandClick(row)' ng-class='{\"glyphicon-chevron-down\": row.expand, \"glyphicon-chevron-right\": !row.expand}' style='cursor:pointer;'></i></div>" +
+            "                   <div ng-if='options.enableExpand && $index == maxColumnNum' class='pull-right' style='display:inline;float:left;'><i class='glyphicon' ng-click='row.expand=!row.expand;expandClick(row)' ng-class='{\"glyphicon-chevron-down\": row.expand, \"glyphicon-chevron-right\": !row.expand}' style='cursor:pointer;'></i></div>" +
             "               </td>\n" +
             "           </tr>\n" +
-            "           <tr ng-show='row.expand'>" +
+            "           <tr ng-show='row.expand' ng-if='options.enableExpand'>" +
             "               <td colspan='{{columnNumber}}'>" +
             "                   <div ng-include=\"row.expandTemplate\"></div>" +
             "               </td>\n" +
