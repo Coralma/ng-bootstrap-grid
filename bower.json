@@ -1,6 +1,6 @@
 {
   "name": "ng-bootstrap-grid",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "homepage": "https://github.com/Coralma/ng-bootstrap-grid",
   "authors": [
     "coral.ma <maqujun@hotmail.com>"
@@ -24,9 +24,10 @@
   ],
   "dependencies": {
     "angular": "~1.4.1",
-    "lodash": "~3.9.3",
-    "bootstrap": "~3.3.4",
+    "angular-once": "~0.1.9",
     "angular-sanitize": "~1.4.1",
+    "bootstrap": "~3.3.4",
+    "lodash": "~3.9.3",
     "ng-context-menu": "~1.0.1"
   }
 }

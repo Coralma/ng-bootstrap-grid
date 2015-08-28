@@ -1,4 +1,4 @@
-angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
+angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile','once'])
     .directive('categoryGrid', function() {
         return {
             restrict: 'E',
@@ -126,6 +126,9 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
                 if(scope.options.onRegisterApi) {
                     scope.options.onRegisterApi({
                         refresh :  function() {scope.categoryData(scope.options.data)},
+                        changeCategoryType :  function(type) {
+                            scope.enableCategory = type;
+                        },
                         getSelectedRows : function() {
                             return scope.getSelectedRows();
                         }
@@ -142,28 +145,28 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
             "   <table class='table table-bordered table-hover bs-grid' style='table-layout:fixed;'>" +
             "       <thead>" +
             "           <tr>" +
-            "               <th ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
+            "               <th once-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
             "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll' ng-checked='selectAllFlag'>" +
             "               </th>" +
-            "               <th ng-repeat='col in columns track by col.field' style={{col.cellStyle}} ng-if='col.visible'>" +
-            "                   <div ng-if='col.headTemplate' compile='col.headTemplate' cell-template-scope='col.headTemplateScope'></div>" +
-            "                   <div ng-if='!col.headTemplate' >{{col.headTemplate || col.displayName || col.field}}</div>" +
+            "               <th ng-repeat='col in columns track by col.field' style={{col.cellStyle}} once-if='col.visible'>" +
+            "                   <div once-if='col.headTemplate' compile='col.headTemplate' cell-template-scope='col.headTemplateScope'></div>" +
+            "                   <div once-if='!col.headTemplate' once-text='col.headTemplate || col.displayName || col.field'></div>" +
             "               </th>" +
             "           </tr>" +
             "       </thead>" +
             "       <tbody ng-repeat='row in rows track by row.category'>" +
             "           <tr ng-click='row.initStatus=!row.initStatus' ng-if='enableCategory'>" +
             "               <td colspan='{{columnNumber}}'>" +
-            "                   <i class='glyphicon panel-icon' ng-class='{\"glyphicon-chevron-down\": row.initStatus, \"glyphicon-chevron-right\": !row.initStatus}'></i><span class='category-title'>{{row.category}}</span>" +
+            "                   <i class='glyphicon panel-icon' ng-class='{\"glyphicon-chevron-down\": row.initStatus, \"glyphicon-chevron-right\": !row.initStatus}'></i><span class='category-title' once-text='row.category'></span>" +
             "               </td>" +
             "           </tr>" +
-            "           <tr ng-repeat='item in row.items track by $id(item)' ng-show='row.initStatus' context-menu='onRightClick(item)' data-target='rowMenu'>" +
-            "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
+            "           <tr ng-repeat='item in row.items track by item.indexOrder' ng-show='row.initStatus' context-menu='onRightClick(item)' data-target='rowMenu'>" +
+            "               <td once-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
             "                   <input type='checkbox' ng-model='item.selection' ng-click='selectRow(row)'>" +
             "               </td>" +
-            "               <td ng-repeat='col in columns track by col.field' style='word-break:break-all;' ng-if='col.visible' title='{{ item[col.field] }}'>" +
-            "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>" +
-            "                   <div ng-if='!col.cellTemplate'>{{ item[col.field] }}</div>" +
+            "               <td ng-repeat='col in columns track by col.field' style='word-break:break-all;' once-if='col.visible' title='{{ item[col.field] }}'>" +
+            "                   <div once-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>" +
+            "                   <div once-if='!col.cellTemplate' once-text='item[col.field]'></div>" +
             "               </td>" +
             "           </tr>" +
             "       </tbody>" +

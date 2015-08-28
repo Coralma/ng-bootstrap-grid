@@ -5,6 +5,7 @@
     <script src="../lib/jquery/dist/jquery.js"></script>
     <script src="../lib/angular-sanitize/angular-sanitize.js"></script>
     <script src="../lib/lodash/lodash.js"></script>
+    <script src="../lib/angular-once/once.js"></script>
     <script src="../lib/ng-context-menu/dist/ng-context-menu.js"></script>
     <script src="../dist/ng-bootstrap-category-grid.js"></script>
     <script src="../dist/ng-bootstrap-expand-grid.js"></script>
@@ -24,6 +25,7 @@
     <div class="container-fluid" ng-controller="MyController">
         <h3>Category Grid</h3>
         <category-grid options="gridOptions" on-select="rowSelect" row-right-click="rightClickEvent"></category-grid>
+        <button class="btn btn-default" ng-click="switch()" type="button">Switch</button>
         <button class="btn btn-default" ng-click="add()" type="button">Add</button>
         <button class="btn btn-default" ng-click="delete()" type="button">Delete</button>
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
@@ -62,6 +64,11 @@
     var myApp = angular.module('myApp', ['ng-context-menu','ng-bootstrap-category-grid']);
 
     myApp.controller('MyController', ['$scope', function($scope) {
+        $scope.switch = function() {
+            $scope.gridOptions.enableCategory = !$scope.gridOptions.enableCategory;
+            /*$scope.gridApi.refresh($scope.gridOptions.enableCategory);*/
+            $scope.gridApi.changeCategoryType($scope.gridOptions.enableCategory);
+        }
         $scope.rightClick = function(item) {
             console.log('ctrl right click entity: '+ JSON.stringify(item, null, '\t'));
         }
@@ -100,14 +107,30 @@
               $scope.gridApi = gridApi;
             },
             data : [
-                {"indexOrder": "2","firstName": "Cox", "lastName": "Carney", "company": "Enormo", "employed": true, "type":'1'},
+                /*{"indexOrder": "2","firstName": "Cox", "lastName": "Carney", "company": "Enormo", "employed": true, "type":'1'},
                 {"indexOrder": "4","firstName": "Lorraine", "lastName": "Wise", "company": "Comveyer", "employed": false, "type":'3'},
                 {"indexOrder": "1", "firstName": "Nancy", "lastName": "Waters", "company": "Enormo", "employed": false, "type":'2'},
                 {"indexOrder": "3", "firstName": "Coral", "lastName": "Ma", "company": "Enormo", "employed": false, "type":'2'},
                 {"indexOrder": "5", "firstName": "Angela", "lastName": "Zero", "company": "Comveyer", "employed": true, "type":'2'},
-                {"indexOrder": "6", "firstName": "Luis", "lastName": "Raca", "company": "Comveyer", "employed": true, "type":'2'},
+                {"indexOrder": "6", "firstName": "Luis", "lastName": "Raca", "company": "Comveyer", "employed": true, "type":'2'},*/
             ]
         }
+
+        var dataValues = [];
+        for(var i=0; i< 300; i++) {
+            var company = "Enormo";
+            if(i % 4 == 0) {
+                company = "Comveyer";
+            }else if(i % 5 == 0) {
+                company = "IBM";
+            }else if(i % 6 == 0) {
+                company = "Facebook";
+            }else if(i % 8 == 0) {
+                company = "Google";
+            }
+            dataValues.push({"indexOrder": i,"firstName": i + "Name" + company + i, "lastName": i+ "Last"+ company + i, "company": company, "employed": true, "type":'1'});
+        }
+        $scope.gridOptions.data = dataValues;
 
         $scope.submitData = function() {
             $scope.resultData = $scope.gridOptions.data;
