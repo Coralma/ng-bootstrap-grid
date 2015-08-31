@@ -6,6 +6,7 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
             scope: {
                 options: '=',
                 onSelect: '=',
+                onDbClickSelectedRow: '=',
                 onPaginationChange: '=',
                 onSortChanged: '='
             },
@@ -54,6 +55,24 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
                         return row.selection==false || row.selection==null;
                     });
                     scope.selectAllFlag = (uncheckedRow==null);
+                }
+                scope.selectSingleRow = function (row, rows) {
+                    if (scope.onSelect) {
+                        cleanRows(rows);
+                        row.$$singleSelectStyle = 'single-select-style';
+                        scope.onSelect(row);
+                    }
+                };
+                scope.doubleSelectSingleRow = function (row, rows) {
+                    if (scope.onDbClickSelectedRow) {
+                        cleanRows(rows);
+                        scope.onDbClickSelectedRow(row);
+                    }
+                };
+                var cleanRows = function(rows) {
+                    _.forEach(rows, function(row) {
+                        row.$$singleSelectStyle = null;
+                    });
                 }
                 scope.sortData = function(col, columns) {
                     if(!col.enableSorting) {
@@ -141,7 +160,7 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
             "           </tr>\n" +
             "       </thead>\n" +
             "       <tbody>\n" +
-            "           <tr ng-repeat='item in options.data'>\n" +
+            "           <tr ng-repeat='item in options.data' ng-click='selectSingleRow(item,options.data)' ng-dblclick='doubleSelectSingleRow(item,options.data)' ng-class='item.$$singleSelectStyle'>\n" +
             "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'><input type='checkbox' ng-model='item.selection' class='childChk' ng-click='selectRow(row)'></td>" +
             "               <td ng-repeat='col in columns' ng-class='col.cellClass'>\n" +
             "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +

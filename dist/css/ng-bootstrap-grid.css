@@ -230,3 +230,18 @@
 .row-highlight {
     background-color: yellow !important;
 }
+
+.category-table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.category-tr {
+    background-color: #fff;
+}
+.category-tr:hover {
+    background-color: #fff;
+}
+
+.single-select-style {
+    background-color: #e9f3f8 !important;
+}
