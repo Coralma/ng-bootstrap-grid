@@ -37,7 +37,7 @@
 <form name="form">
     <div class="container-fluid" ng-controller="MyController">
         <h1>Pagination Grid</h1>
-        <bs-grid options="gridOptions" on-select="rowSelect" on-db-click-selected-row="dbClickRowSelect" on-pagination-change="pageChange" on-sort-changed="sortChange"></bs-grid>
+        <bs-grid options="gridOptions" on-select="rowSelect" on-db-click-row="dbClickRowSelect" on-pagination-change="pageChange" on-sort-changed="sortChange"></bs-grid>
         <!--<pagination-grid options="gridOptions" on-select="rowSelect"></pagination-grid>-->
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
         <button class="btn btn-default" ng-click="selectedRows()" type="button">Get Selected Rows</button>

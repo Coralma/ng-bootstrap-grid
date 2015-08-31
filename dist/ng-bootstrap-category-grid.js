@@ -51,6 +51,7 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile','once'])
                         categoryRow.items = data;
                         categoryRows.push(categoryRow);
                     }
+
                     scope.rows = categoryRows;
                 }
 
@@ -142,7 +143,7 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile','once'])
             },
             template:
             "<div class='table-responsive'>" +
-            "   <table class='table table-bordered table-hover bs-grid' style='table-layout:fixed;'>" +
+            "   <table class='table table-bordered table-hover bs-grid category-table-striped' style='table-layout:fixed;'>" +
             "       <thead>" +
             "           <tr>" +
             "               <th once-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
@@ -155,12 +156,12 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile','once'])
             "           </tr>" +
             "       </thead>" +
             "       <tbody ng-repeat='row in rows track by row.category'>" +
-            "           <tr ng-click='row.initStatus=!row.initStatus' ng-if='enableCategory'>" +
+            "           <tr ng-click='row.initStatus=!row.initStatus' ng-if='enableCategory' class='category-tr'>" +
             "               <td colspan='{{columnNumber}}'>" +
             "                   <i class='glyphicon panel-icon' ng-class='{\"glyphicon-chevron-down\": row.initStatus, \"glyphicon-chevron-right\": !row.initStatus}'></i><span class='category-title' once-text='row.category'></span>" +
             "               </td>" +
             "           </tr>" +
-            "           <tr ng-repeat='item in row.items track by item.indexOrder' ng-show='row.initStatus' context-menu='onRightClick(item)' data-target='rowMenu'>" +
+            "           <tr ng-repeat='item in row.items track by $id(item)' ng-show='row.initStatus' context-menu='onRightClick(item)' data-target='rowMenu'>" +
             "               <td once-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
             "                   <input type='checkbox' ng-model='item.selection' ng-click='selectRow(row)'>" +
             "               </td>" +

@@ -235,11 +235,15 @@
     background-color: #f9f9f9;
 }
 
+.category-table-striped > tbody > tr:nth-of-type(odd):hover {
+    background-color: #e9f3f8;
+}
+
 .category-tr {
-    background-color: #fff;
+    background-color: #fff !important;
 }
 .category-tr:hover {
-    background-color: #fff;
+    background-color: #fff !important;
 }
 
 .single-select-style {

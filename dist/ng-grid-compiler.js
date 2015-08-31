@@ -1,7 +1,7 @@
 angular.module('ng-bootstrap-compile', [])
     .directive('compile', [
-        '$compile',
-        function ($compile) {
+        '$compile','$timeout',
+        function ($compile,$timeout) {
             return {
                 /*require: '^form',*/
                 restrict: 'A',
