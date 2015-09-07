@@ -164,7 +164,8 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
             "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'><input type='checkbox' ng-model='item.selection' class='childChk' ng-click='selectRow(row)'></td>" +
             "               <td ng-repeat='col in columns' ng-class='col.cellClass'>\n" +
             "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +
-            "                   <div ng-if='!col.cellTemplate' title='{{ item[col.field] }}'>{{ col.filter ? $filter(col.filter)(item[col.field]) : item[col.field] }}</div>\n" +
+            /*"                   <div ng-if='!col.cellTemplate' title='{{ ::item[col.field] }}'>{{ col.filter ? $filter(col.filter)(item[col.field]) : item[col.field] }}</div>\n" +*/
+            "                   <div ng-if='!col.cellTemplate' title='{{ ::item[col.field] }}'>{{ ::item[col.field] }}</div>\n" +
             "               </td>\n" +
             "           </tr>\n" +
             "           <tr ng-if='options.data == null || options.data.length == 0'>" +
