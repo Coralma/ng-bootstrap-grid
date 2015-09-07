@@ -5,7 +5,7 @@
     <script src="../lib/jquery/dist/jquery.js"></script>
     <script src="../lib/angular-sanitize/angular-sanitize.js"></script>
     <script src="../lib/lodash/lodash.js"></script>
-    <script src="../lib/angular-once/once.js"></script>
+
     <script src="../lib/ng-context-menu/dist/ng-context-menu.js"></script>
     <script src="../dist/ng-bootstrap-category-grid.js"></script>
     <script src="../dist/ng-bootstrap-expand-grid.js"></script>
@@ -83,7 +83,7 @@
 
         $scope.gridOptions = {
             enableRowSelection: true,
-            enableCategory:true,
+            enableCategory:false,
             columnDefs : [
                 {displayName: 'IndexOrder', field:'indexOrder', enableSorting: true},
                 {displayName: 'FirstName', field:'firstName', cellTemplate:'<input type="text" ng-model="item[col.field]" style="width:100%;">'},
@@ -110,7 +110,7 @@
         }
 
         var dataValues = [];
-        for(var i=0; i< 60; i++) {
+        for(var i=0; i< 30; i++) {
             var company = "Enormo";
             if(i % 4 == 0) {
                 company = "Comveyer";
