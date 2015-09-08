@@ -37,8 +37,8 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
                             uniqCategoryItem = uniqCategorys[j++];
                             var categoryRow = {};
                             categoryRow.category = uniqCategoryItem;
-                            categoryRow.selection = false;
-                            categoryRow.initStatus = true;
+                            categoryRow.$selection = false;
+                            categoryRow.$initStatus = true;
                             categoryRow.items = _.filter(data, function (item) {
                                 return item[categoryField] == uniqCategoryItem;
                             });
@@ -47,8 +47,8 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
                     } else {
                         var categoryRow = {};
                         categoryRow.category = 'no-category';
-                        categoryRow.selection = false;
-                        categoryRow.initStatus = true;
+                        categoryRow.$selection = false;
+                        categoryRow.$initStatus = true;
                         categoryRow.items = data;
                         categoryRows.push(categoryRow);
                     }
@@ -131,7 +131,7 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
                         var items = row.items;
                         for(var j=0; j < items.length; j++) {
                             var item = items[j];
-                            item.selection = isSelectAll;
+                            item.$selection = isSelectAll;
                         }
                     }
                     scope.selectAllFlag = isSelectAll;
@@ -142,7 +142,7 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
                     }
                     //checkbox select all and un-check operation.
                     var uncheckedRow=_.find(scope.options.data,function(row){
-                        return row.selection==false || row.selection==null;
+                        return row.$selection==false || row.$selection==null;
                     });
                     scope.selectAllFlag = (uncheckedRow==null);
                 }
@@ -150,7 +150,7 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
                     var selectedRows = [];
                     _.forEach(scope.rows, function(row) {
                         _.forEach(row.items, function(item) {
-                            if(item.selection) {
+                            if(item.$selection) {
                                 selectedRows.push(item);
                             }
                         })
@@ -185,7 +185,7 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
                 });*/
             },
             template:
-            "<div class='table-responsive' style='height:300px;'>" +
+            "<div class='table-responsive'>" +
             "   <table class='table table-bordered table-hover bs-grid category-table-striped' style='table-layout:fixed;'>" +
             "       <thead>" +
             "           <tr>" +
@@ -199,14 +199,14 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
             "           </tr>" +
             "       </thead>" +
             "       <tbody ng-repeat='row in rows track by row.category'>" +
-            "           <tr ng-click='row.initStatus=!row.initStatus' ng-if='enableCategory' class='category-tr'>" +
+            "           <tr ng-click='row.$initStatus=!row.$initStatus' ng-if='enableCategory' class='category-tr'>" +
             "               <td colspan='{{::columnNumber}}'>" +
-            "                   <i class='glyphicon panel-icon' ng-class='{\"glyphicon-chevron-down\": row.initStatus, \"glyphicon-chevron-right\": !row.initStatus}'></i><span class='category-title'>{{ ::row.category}}</span>" +
+            "                   <i class='glyphicon panel-icon' ng-class='{\"glyphicon-chevron-down\": row.$initStatus, \"glyphicon-chevron-right\": !row.$initStatus}'></i><span class='category-title'>{{ ::row.category}}</span>" +
             "               </td>" +
             "           </tr>" +
-            "           <tr ng-repeat='item in row.items track by $index' ng-show='row.initStatus' context-menu='onRightClick(item)' data-target='rowMenu'>" +
+            "           <tr ng-repeat='item in row.items track by $index' ng-show='row.$initStatus' context-menu='onRightClick(item)' data-target='rowMenu'>" +
             "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
-            "                   <input type='checkbox' ng-model='item.selection' ng-click='selectRow(row)'>" +
+            "                   <input type='checkbox' ng-model='item.$selection' ng-click='selectRow(row)'>" +
             "               </td>" +
             "               <td ng-repeat='col in columns track by col.field' style='word-break:break-all;' ng-if='col.visible' title='{{ ::item[col.field] }}'>" +
             "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>" +
