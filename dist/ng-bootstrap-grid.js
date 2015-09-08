@@ -42,7 +42,7 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
                     var rows = scope.options.data;
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
-                        row.selection = isSelectAll;
+                        row.$selection = isSelectAll;
                     }
                     scope.selectAllFlag = isSelectAll;
                 };
@@ -52,14 +52,14 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
                     }
                     //checkbox的全选和全不选的问题
                     var uncheckedRow=_.find(scope.options.data,function(row){
-                        return row.selection==false || row.selection==null;
+                        return row.$selection==false || row.$selection==null;
                     });
                     scope.selectAllFlag = (uncheckedRow==null);
                 }
                 scope.selectSingleRow = function (row, rows) {
                     if (scope.onSelect && !scope.options.enableRowSelection) {
                         cleanRows(rows);
-                        row.rowHighlight = true;
+                        row.$rowHighlight = true;
                         scope.onSelect(row);
                     }
                 };
@@ -71,7 +71,7 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
                 };
                 var cleanRows = function(rows) {
                     _.forEach(rows, function(row) {
-                        row.rowHighlight = false;
+                        row.$rowHighlight = false;
                     });
                 }
                 scope.sortData = function(col, columns) {
@@ -119,7 +119,7 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
                 scope.getSelectedRows = function() {
                     var selectedRows = [];
                     _.forEach(scope.options.data, function(item) {
-                        if(item.selection) {
+                        if(item.$selection) {
                             selectedRows.push(item);
                         }
                     });
@@ -143,15 +143,15 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
                 }*/
             },
             template:
-            "   <table class='table table-bordered table-hover table-striped' id='{{options.gridId}}'>\n" +
+            "   <table class='table table-bordered table-hover table-striped' id='{{::options.gridId}}'>\n" +
             "       <thead>\n" +
             "           <tr>\n" +
             "               <th ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
             "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll' ng-checked='selectAllFlag'>" +
             "               </th>" +
-            "               <th ng-repeat='col in columns' style='{{col.cellStyle}}' ng-class='col.enableSorting ? \"sortable-head\" : \"\"' ng-click='sortData(col, columns)'>" +
+            "               <th ng-repeat='col in columns' style='{{::col.cellStyle}}' ng-class='col.enableSorting ? \"sortable-head\" : \"\"' ng-click='sortData(col, columns)'>" +
             "                   <div ng-if='col.headTemplate' compile='col.headTemplate' cell-template-scope='col.headTemplateScope'></div>" +
-            "                   <div ng-if='!col.headTemplate' style='display:inline;'>{{col.headTemplate || col.displayName || col.field}}</div>" +
+            "                   <div ng-if='!col.headTemplate' style='display:inline;'>{{::(col.headTemplate || col.displayName || col.field)}}</div>" +
             "                   <div ng-if='col.sort == \"asc\"' style='display:inline;'><i class='glyphicon' ng-class='\"glyphicon glyphicon-triangle-bottom\"'></i></div>" +
             "                   <div ng-if='col.sort == \"desc\"' style='display:inline;'><i class='glyphicon' ng-class='\"glyphicon glyphicon-triangle-top\"'></i></div>" +
             /*"                   <div ng-if='$index == maxColumnNum && !scope.options.enableGridMenu' class='pull-right' style='display:inline;'><i class='glyphicon' ng-click='' ng-class='\"glyphicon glyphicon-cog\"' style='cursor:pointer;'></i>" +*/
@@ -160,8 +160,8 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
             "           </tr>\n" +
             "       </thead>\n" +
             "       <tbody>\n" +
-            "           <tr ng-repeat='item in options.data' ng-click='selectSingleRow(item,options.data)' ng-dblclick='doubleSelectSingleRow(item,options.data)' ng-class='item.rowHighlight ? \"row-highlight\" : \"\"'>\n" +
-            "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'><input type='checkbox' ng-model='item.selection' class='childChk' ng-click='selectRow(row)'></td>" +
+            "           <tr ng-repeat='item in options.data' ng-click='selectSingleRow(item,options.data)' ng-dblclick='doubleSelectSingleRow(item,options.data)' ng-class='item.$rowHighlight ? \"row-highlight\" : \"\"'>\n" +
+            "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'><input type='checkbox' ng-model='item.$selection' class='childChk' ng-click='selectRow(row)'></td>" +
             "               <td ng-repeat='col in columns' ng-class='col.cellClass'>\n" +
             "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +
             /*"                   <div ng-if='!col.cellTemplate' title='{{ ::item[col.field] }}'>{{ col.filter ? $filter(col.filter)(item[col.field]) : item[col.field] }}</div>\n" +*/
@@ -169,12 +169,12 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
             "               </td>\n" +
             "           </tr>\n" +
             "           <tr ng-if='options.data == null || options.data.length == 0'>" +
-            "               <td colspan='{{columnNumber}}' class='no-data'>{{options.noDataMessage}}</td>" +
+            "               <td colspan='{{::columnNumber}}' class='no-data'>{{::options.noDataMessage}}</td>" +
             "           </tr>" +
             "       </tbody>\n" +
             "       <tfoot class='bs-foot'>" +
             "           <tr ng-if='options.useExternalPagination'>" +
-            "               <td colspan='{{columnNumber}}'>" +
+            "               <td colspan='{{::columnNumber}}'>" +
             "                   <div paged-grid-bar></div>" +
             "               </td>" +
             "           </tr>" +
