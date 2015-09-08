@@ -35,7 +35,7 @@
 
     myApp.controller('MyController', ['$scope', function($scope) {
         $scope.gridOptions = {
-            enableExpand: false,
+            enableExpand: true,
             enableRowSelection: true,
             enableSingleExpand: true,
             expandableRowTemplate: 'expandForm.html',
@@ -46,24 +46,15 @@
                 {displayName: 'Employed', field:'employed'}
             ],
             data : [
-                {
-                    "firstName": "Cox",
-                    "lastName": "Carney",
-                    "company": "Enormo",
-                    "employed": true
-                },
-                {
-                    "firstName": "Lorraine",
-                    "lastName": "Wise",
-                    "company": "Comveyer",
-                    "employed": false
-                },
-                {
-                    "firstName": "Nancy",
-                    "lastName": "Waters",
-                    "company": "Enormo",
-                    "employed": false
-                }
+                {"firstName": "Cox","lastName": "Carney","company": "Enormo","employed": true},
+                {"firstName": "Lorraine","lastName": "Wise","company": "Comveyer","employed": false},
+                {"firstName": "Nancy","lastName": "Waters","company": "Enormo","employed": false},
+                {"firstName": "Vance","lastName": "Loss","company": "Enormo","employed": true},
+                {"firstName": "Herric","lastName": "Kimi","company": "Comveyer","employed": false},
+                {"firstName": "Lora","lastName": "Mita","company": "Enormo","employed": false},
+                {"firstName": "Naxs","lastName": "Remand","company": "Enormo","employed": true},
+                {"firstName": "Coral","lastName": "Verty","company": "Comveyer","employed": false},
+                {"firstName": "Facy","lastName": "Will","company": "Enormo","employed": false}
             ]
         }
 

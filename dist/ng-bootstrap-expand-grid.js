@@ -28,7 +28,7 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
                     });
                     scope.rows = rows;
                     scope.columnNumber = scope.options.columnDefs.length + 1; //FIXME it remove the hidden column and selection function.
-                    console.log(JSON.stringify(scope.rows, null, '\t'));
+                    /*console.log(JSON.stringify(scope.rows, null, '\t'));*/
                 };
                 scope.initData();
 
@@ -111,7 +111,7 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
             },
             template:
             "<div class='table-responsive'>\n" +
-            "   <table class='table table-bordered ep-grid' style='table-layout:fixed;'>\n" +
+            "   <table class='table table-bordered table-hover expand-table-striped ep-grid' style='table-layout:fixed;'>\n" +
             "       <thead>\n" +
             "           <tr>\n" +
             "               <th ng-if='options.enableRowSelection' class='grid-checkbox-cell'>" +
@@ -123,8 +123,8 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
             "               </th>\n" +
             "           </tr>\n" +
             "       </thead>\n" +
-            "       <tbody ng-repeat='row in rows'>\n" +
-            "           <tr ng-dblclick='row.expand=!row.expand;expandClick(row)'>\n" +
+            "       <tbody>\n" +
+            "           <tr ng-repeat-start='row in rows' ng-dblclick='row.expand=!row.expand;expandClick(row)'>\n" +
             "               <td ng-if='options.enableRowSelection' class='grid-checkbox-cell'><input type='checkbox' ng-model='row.item.selection' ng-click='selectRow(row)' ng-disabled='row.item.readonly'></td>" +
             "               <td ng-repeat='col in columns' style='word-break:break-all;'>\n" +
             "                   <div ng-if='col.cellTemplate' compile='col.cellTemplate' cell-template-scope='col.cellTemplateScope'></div>\n" +
@@ -132,7 +132,7 @@ angular.module('ng-bootstrap-expand-grid', ['ng-bootstrap-compile'])
             "                   <div ng-if='options.enableExpand && $index == maxColumnNum' class='pull-right' style='display:inline;float:left;'><i class='glyphicon' ng-click='row.expand=!row.expand;expandClick(row)' ng-class='{\"glyphicon-chevron-down\": row.expand, \"glyphicon-chevron-right\": !row.expand}' style='cursor:pointer;'></i></div>" +
             "               </td>\n" +
             "           </tr>\n" +
-            "           <tr ng-show='row.expand' ng-if='options.enableExpand'>" +
+            "           <tr ng-repeat-end ng-show='row.expand' ng-if='options.enableExpand' class='expand-form-tr'>" +
             "               <td colspan='{{columnNumber}}'>" +
             "                   <div ng-include=\"row.expandTemplate\"></div>" +
             "               </td>\n" +
