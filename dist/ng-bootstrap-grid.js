@@ -69,6 +69,9 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
                         scope.onDbClickRow(row);
                     }
                 };
+                scope.unSelectedSingleRow = function() {
+                    cleanRows(scope.options.data);
+                };
                 var cleanRows = function(rows) {
                     _.forEach(rows, function(row) {
                         row.$rowHighlight = false;
@@ -131,6 +134,9 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
                     scope.options.onRegisterApi({
                         getSelectedRows : function() {
                             return scope.getSelectedRows();
+                        },
+                        cleanSelectedSingleRow: function() {
+                            scope.unSelectedSingleRow();
                         }
                     });
                 }

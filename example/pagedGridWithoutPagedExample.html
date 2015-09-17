@@ -41,6 +41,7 @@
         <!--<pagination-grid options="gridOptions" on-select="rowSelect"></pagination-grid>-->
         <button class="btn btn-default" ng-click="submitData()" type="button">Submit Form</button>
         <button class="btn btn-default" ng-click="selectedRows()" type="button">Get Selected Rows</button>
+        <button class="btn btn-default" ng-click="unSelectedRows()" type="button">Un-Selected Rows</button>
         <p>{{gridOptions.data}}</p>
     </div>
 </form>
@@ -102,6 +103,11 @@
             var rows = $scope.gridApi.getSelectedRows();
             console.log(JSON.stringify(rows));
         }
+
+        $scope.unSelectedRows = function() {
+            $scope.gridApi.cleanSelectedSingleRow();
+        }
+
 
         $scope.dbClickRowSelect = function(row) {
             console.log('double click row select');
