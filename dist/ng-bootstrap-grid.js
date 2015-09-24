@@ -42,7 +42,9 @@ angular.module('ng-bootstrap-grid', ['ng-bootstrap-compile'])
                     var rows = scope.options.data;
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
-                        row.$selection = isSelectAll;
+                        if(!row.$disSelectable) {
+                            row.$selection = isSelectAll;
+                        }
                     }
                     scope.selectAllFlag = isSelectAll;
                 };
