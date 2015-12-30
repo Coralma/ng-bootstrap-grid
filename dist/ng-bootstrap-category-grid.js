@@ -1,6 +1,6 @@
 angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
     .directive('categoryGrid', function($timeout) {
-        var LIMIT_NUMBER = 20;
+        var LIMIT_NUMBER = 30;
         return {
             restrict: 'E',
             replace: true,
@@ -12,7 +12,6 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
             link : function (scope, element, attrs) {
                 scope.enableCategory = true;
                 scope.columns = scope.options.columnDefs;
-                /*scope.data = scope.options.data;*/
                 scope.selectAllFlag = false;
                 scope.appScope = scope.$parent;
                 scope.categoryData = function(data) {
@@ -52,11 +51,8 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
                         categoryRow.items = data;
                         categoryRows.push(categoryRow);
                     }
-
-                    /*scope.rows = categoryRows;*/
                     lazyLoadRows(categoryRows);
                 }
-
                 lazyLoadRows = function(categoryRows) {
                     var index = 0, realRows = [], lazyRows = [];
                     if(categoryRows.length == 1) {
@@ -176,13 +172,6 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
                         scope.rowRightClick(item);
                     }
                 }
-
-                /*$timeout(function() {
-                    $(element).on('scroll', function(evt){
-                        console.log($(element).scrollTop() + ' ; ' + evt.target.offsetHeight  + ' : ' + evt.target.scrollHeight);
-                        // calculate the bottom use the [$(element).scrollTop() + evt.target.offsetHeight ] == evt.target.scrollHeight
-                    });
-                });*/
             },
             template:
             "<div class='table-responsive'>" +
@@ -193,7 +182,6 @@ angular.module('ng-bootstrap-category-grid', ['ng-bootstrap-compile'])
             "                   <input type='checkbox' ng-click='selectAll(isSelectAll)' ng-model='isSelectAll' ng-checked='selectAllFlag'>" +
             "               </th>" +
             "               <th ng-repeat='col in columns track by col.field' style={{::col.cellStyle}} ng-if='col.visible'>" +
-            /*"                   <div ng-if='col.headTemplate' compile='col.headTemplate' cell-template-scope='col.headTemplateScope'></div>" +*/
             "                   <div ng-if='!col.headTemplate'>{{ ::(col.headTemplate || col.displayName || col.field) }}</div>" +
             "               </th>" +
             "           </tr>" +

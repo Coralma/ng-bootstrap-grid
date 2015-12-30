@@ -4,7 +4,6 @@
     <script src="../lib/jquery/dist/jquery.js"></script>
     <script src="../lib/angular/angular.js"></script>
     <script src="../lib/lodash/lodash.js"></script>
-    <script src="../lib/fixedheadertable/jquery.fixedheadertable.js"></script>
 
     <script src="../dist/ng-bootstrap-grid.js"></script>
     <script src="../dist/ng-bootstrap-category-grid.js"></script>
@@ -12,7 +11,6 @@
     <script src="../dist/ng-grid-compiler.js"></script>
 
     <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="../lib/fixedheadertable/defaultTheme.css">
     <link rel="stylesheet" href="../dist/css/ng-bootstrap-grid.css">
     <style>
         body {
@@ -51,19 +49,10 @@
     myApp.controller('MyController', ['$scope','$filter', function($scope, $filter) {
         console.log($filter('decimalFilter')(123));
         $scope.gridOptions = {
-            gridId : 'testGrid',
             enableOverflow : true,
             overflowHeight : '300px',
-            paginationPageSizes: [5, 10, 15],
-            paginationPageSize: 5,
             useExternalPagination: false,
             enableRowSelection: false,
-            enableGridMenu: false,
-            currentMessage: 'Display (',
-            separateMessage: '), Total : ',
-            unitMessage: ' ',
-            displayNumMessage: 'Display Number',
-            noDataMessage: '没有找到匹配的结果',
             onRegisterApi : function(gridApi){
                 $scope.gridApi = gridApi;
             },
