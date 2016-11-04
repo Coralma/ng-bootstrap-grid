@@ -86,7 +86,9 @@
             enableCategory: true,
             columnDefs : [
                 {displayName: 'IndexOrder', field:'indexOrder', enableSorting: true},
-                {displayName: 'FirstName', field:'firstName', cellTemplate:'<input type="text" ng-model="item[col.field]" style="width:100%;">'},
+                {displayName: 'FirstName', field:'firstName',
+                    cellTemplate:'<div ng-init="ccFn=true" ng-click="ccFn=false;"><span ng-if="ccFn">{{item[col.field]}}</span><input type="text" ng-model="item[col.field]" style="width:100%;" ng-if="!ccFn"></div>'
+                },
                 {displayName: 'LastName', field:'lastName', cellTemplate:'<over-div title="item[col.field]"></over-div>'},
                 {displayName: 'Company', field:'company', category:true},
                 {displayName: 'Employed', field:'employed', cellTemplate:'<input type="checkbox" ng-model="item[col.field]" ng-click="cellTemplateScope.changeEmployed(item)">',
