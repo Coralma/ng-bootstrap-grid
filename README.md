@@ -1,23 +1,23 @@
 ## ng-bootstrap-grid
 This project provide a Grid (Table) controller for angularJs. The style will use the bootstrap. The function will include Selection Grid, Category Grid and Pagination Grid.
 
-###Screenshot
+##Screenshot
 
 ![image](https://github.com/Coralma/ng-bootstrap-grid/blob/master/example/screenshot/category.jpg)
 ![image](https://github.com/Coralma/ng-bootstrap-grid/blob/master/example/screenshot/expandGrid.jpg)
 ![image](https://github.com/Coralma/ng-bootstrap-grid/blob/master/example/screenshot/paginationGrid.jpg)
 
 
-###Installation
+##Installation
 Installation is easy as ng-bootstrap-grid has minimal dependencies - only the AngularJS, Twitter Bootstrap's CSS and lodash are required.
 
-####Install with Bower
+##Install with Bower
 ```html
 bowser install ng-bootstrap-grid --save
 ```
 
 
-###Adding dependency to your project
+##Adding dependency to your project
 When you are done downloading all the dependencies and project files the only remaining part is to add dependencies on the ng-bootstrap-grid AngularJS module:
 ```html
 angular.module('myApp', ['ng-bootstrap-grid']);
@@ -41,7 +41,7 @@ When you're done, your setup should look similar to the following:
 ```
 
 
-###Supported browsers
+##Supported browsers
 Directives from this repository are automatically tested with the following browsers:
 - Chrome (stable and canary channel)
 - Firefox
@@ -51,17 +51,17 @@ Directives from this repository are automatically tested with the following brow
 
 Modern mobile browsers should work without problems.
 
-###Example
+##Example
 Please download and use `bower install` the project. Run and check the example case for usage.
 
-###Need help?
+##Need help?
 Need help using ng-bootstrap-grid?
 
 - Create new issues in this repository to ask questions about using ng-bootstrap-grid.
 - Ask a question in StackOverflow under the ng-bootstrap-grid tag.
  
 
-###Roadmap of ng-bootstrap-grid
+##Roadmap of ng-bootstrap-grid
 - Support basic bootstrap grid (`DONE`)
 - Support cell template for all kinds of bootstrap grid (`DONE`)
 - Support selection bootstrap grid (`DONE`)
@@ -76,7 +76,7 @@ Need help using ng-bootstrap-grid?
 - Support footer of bootstrap grid (`TODO`) 
 - Support multiple level header of bootstrap grid (`TODO`) 
 
-###Thanks
+##Thanks
 Thanks ng-grid push me to make this decision create this project. The function of ng-grid is awesome but UI style and performance is far form what I expect.
 
 Thanks Lodash and bootstrap, both of you are awesome technology and less my code.
