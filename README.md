@@ -2,6 +2,7 @@
 This project provide a Grid (Table) controller for angularJs. The style will use the bootstrap. The function will include Selection Grid, Category Grid and Pagination Grid.
 
 ###Screenshot
+
 ![image](https://github.com/Coralma/ng-bootstrap-grid/blob/master/example/screenshot/category.jpg)
 ![image](https://github.com/Coralma/ng-bootstrap-grid/blob/master/example/screenshot/expandGrid.jpg)
 ![image](https://github.com/Coralma/ng-bootstrap-grid/blob/master/example/screenshot/paginationGrid.jpg)
